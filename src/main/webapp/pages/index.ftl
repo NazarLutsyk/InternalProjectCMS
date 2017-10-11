@@ -64,7 +64,7 @@
 <#--<script src="/script/select2.js"></script>-->
 <div style="text-align: center">
     <img src="/images/logo.png" width="45%" height="550px"><br>
-    <#--<img src="/images/cms.png" width="25%" height="150px">-->
+    <img src="/images/crm.png" width="20%" height="200px">
 </div>
 </body>
 </html>
