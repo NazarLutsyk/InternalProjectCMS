@@ -1,6 +1,4 @@
 <#include "templates/header.ftl">
-
-
 <#--<h1>${msg}</h1>-->
 <#--<ol>-->
 <#--<li><a href="/adminPage">перейти в админку</a></li>-->

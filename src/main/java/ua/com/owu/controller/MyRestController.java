@@ -9,14 +9,12 @@ import ua.com.owu.dto.ClientDTO;
 import ua.com.owu.entity.Client;
 import ua.com.owu.entity.Course;
 import ua.com.owu.entity.Group;
-import ua.com.owu.entity.enums.Social;
 import ua.com.owu.service.ApplicationService;
 import ua.com.owu.service.ClientService;
 import ua.com.owu.service.CourseService;
 import ua.com.owu.service.GroupService;
 import ua.com.owu.service.util.ClientDTOAdapter;
 
-import java.time.Month;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +52,7 @@ public class MyRestController {
     @PostMapping(value = "/findClientsWitchNotFromGroup")
     public List<ClientDTO> findClientsWitchNotFromGroup(@RequestBody String groupId) {
         List<ClientDTO> clients = clientDTOAdapter.convertToListOfClientDTO(
-                clientService.findClientsWitchNotFromGroup(groupId)
+                clientService.findClientsWitchNotFromGroupAndWithApp(groupId)
         );
         return clients;
     }

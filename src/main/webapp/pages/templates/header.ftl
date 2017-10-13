@@ -45,7 +45,7 @@
     <li><a href="/showAllCourses">Курсы</a></li>
     <li><a href="/showAllGroups">Группы</a></li>
     <li><a href="/analitics">Аналитика</a></li>
-    <form action="/logout" method="post" style="float: right">
+    <form action="ё/logout" method="post" style="float: right">
         <input type="submit" value="Logout">
     </form>
 </ol>

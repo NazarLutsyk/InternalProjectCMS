@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.owu.entity.Application;
 import ua.com.owu.entity.Client;
@@ -94,12 +95,14 @@ public class RouteController {
     }
 
     @GetMapping("/showAllClients")
-    public String showAllClients(Model model) {
-
-        System.out.println(clientService.findAll());
-        model.addAttribute("courses", courseService.findAll());
-        model.addAttribute("groups", groupService.findAll());
-        model.addAttribute("clients", clientService.findAll());
+    public String showAllClients(Model model,
+                                 @RequestParam(required = false, defaultValue = "false") boolean withoutGroups) {
+        List<Client> clients;
+        if (withoutGroups)
+            clients = clientService.findClientsWithoutGroups();
+        else
+            clients = clientService.findAll();
+        model.addAttribute("clients", clients);
         return "showAllClientsPage";
     }
 
@@ -125,6 +128,5 @@ public class RouteController {
     public String getAnaliticPage() {
         return "analiticPage";
     }
-
 
 }

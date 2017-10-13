@@ -20,13 +20,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(noClassnameStored = true, value = "client")
-@ToString(exclude = {"groups"})
-@EqualsAndHashCode(exclude = {"groups", "recomendation"})
+@ToString(exclude = {"groups","applications"})
+@EqualsAndHashCode(exclude = {"groups", "recomendation","applications"})
 @Builder
 public class Client {
     @Id
     private ObjectId id;
-
     @Indexed
     private String name;
     @Indexed
@@ -43,9 +42,11 @@ public class Client {
     @JsonIgnore
     @Reference
     private Client recomendation;
-
     @JsonIgnore
     @Reference
     private Set<Group> groups = new HashSet<>();
+    @JsonIgnore
+    @Reference
+    private List<Application> applications = new ArrayList<>();
 
 }

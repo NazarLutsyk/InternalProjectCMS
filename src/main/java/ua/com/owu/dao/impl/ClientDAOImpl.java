@@ -55,7 +55,7 @@ public class ClientDAOImpl implements ClientDAO {
     }
 
     @Override
-    public List<Client> findClientsWitchNotFromGroup(String groupId) {
+    public List<Client> findClientsWitchNotFromGroupAndWithApp(String groupId) {
         Query<Group> query = datastore.createQuery(Group.class)
                 .field("id")
                 .equal(new ObjectId(groupId));
@@ -70,6 +70,16 @@ public class ClientDAOImpl implements ClientDAO {
                 .map(application -> application.getClient())
                 .distinct()
                 .collect(Collectors.toList());
+        System.out.println("Found list client witch not from group and with app:" + clients);
+        return clients;
+    }
+
+    @Override
+    public List<Client> findClientsWithoutGroups() {
+        List<Client> clients = datastore.find(Client.class)
+                .field("groups")
+                .equal(null)
+                .asList();
         System.out.println("Found list client witch not from group:" + clients);
         return clients;
     }

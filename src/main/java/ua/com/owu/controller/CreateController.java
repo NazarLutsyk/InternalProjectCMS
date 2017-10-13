@@ -33,6 +33,9 @@ public class CreateController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private PaymentService paymentService;
+
     @PostMapping("/createCourse")
     public String createCourse(
             @RequestParam String courseTitle,
@@ -103,8 +106,11 @@ public class CreateController {
     ) throws ParseException {
 
         Course crs = courseService.findOne(course);
+        Client clientObj = clientService.findOne(client);
+
         Application application
                 = Application.builder()
+                .id(new ObjectId())
                 .appReciveDate(new Helper().dateFormater(appReciveDate))
                 .source(Social.valueOf(source))
                 .commnetFromClient(commnetFromClient)
@@ -112,15 +118,31 @@ public class CreateController {
                 .tagsAboutApplication(new Helper().tagsFormater(tagsAboutApplication))
                 .futureCourse(futureCourse)
                 .appCloseDate(appCloseDate.substring(0, 25))
-                .client(clientService.findOne(client))
+                .client(clientObj)
                 .course(crs)
-                .discount(discount)
-                .paid(0.0)
-                .priceWithDiscount(new Helper().priceCounter(crs.getFullPrice(), discount))
                 .build();
-        application.setLeftToPay(application.getPriceWithDiscount() - application.getPaid());
+        Payment payment = Payment.builder()
+                .id(new ObjectId())
+                .application(application)
+                .discount(discount)
+                .priceWithDiscount(new Helper().priceCounter(crs.getFullPrice(), discount))
+                .paid(0.0)
+                .leftToPay(new Helper().priceCounter(crs.getFullPrice(), discount))
+                .build();
+        application.setPayment(payment);
 
+//        if (clientObj.getApplications() == null){
+//            ArrayList<Application> applications = new ArrayList<>();
+//            applications.add(application);
+//            clientObj.setApplications(applications);
+//        }else {
+//            clientObj.getApplications().add(application);
+//        }
+
+        clientObj.getApplications().add(application);
         applicationService.save(application);
+        paymentService.save(payment);
+        clientService.save(clientObj);
         return "redirect:/adminPage";
     }
 
@@ -166,7 +188,6 @@ public class CreateController {
             @RequestParam String clientOurComment,
             @RequestParam String clientTagsAboutClient,
             @RequestParam String clientRecomendation,
-
             @RequestParam String appDateRecive,
             @RequestParam String appSource,
             @RequestParam String appCommentFromClient,
@@ -175,18 +196,14 @@ public class CreateController {
             @RequestParam String appFutureCourse,
             @RequestParam Integer appDiscount,
             @RequestParam String appCloseDate,
-
-
             @RequestParam String courseSelect,
-
             @RequestParam String groupSelect
-
-
     ) throws ParseException {
 
         Helper helper = new Helper();
 
         Client client = Client.builder()
+                .id(new ObjectId())
                 .name(clientName)
                 .surname(clientSurname)
                 .phoneNumber(clientPhone)
@@ -198,14 +215,12 @@ public class CreateController {
             client.builder().recomendation(clientService.findOne(clientRecomendation));
         }
         Comment comment = Comment.builder()
+                .id(new ObjectId())
                 .text(clientOurComment)
                 .client(client)
                 .build();
         client.getCommentsAboutClient().add(comment);
-        clientService.save(client);
-        commentService.save(comment);
         System.out.println("Client now is - " + client);
-
 
         Course course = courseService.findOne(courseSelect);
         System.out.println(appDiscount);
@@ -219,19 +234,31 @@ public class CreateController {
                 .commentFromManager(appOurComment)
                 .tagsAboutApplication(helper.tagsFormater(appTags))
                 .futureCourse(!appFutureCourse.equals("empty") ? appFutureCourse : "n/a")
-                .discount(appDiscount)
-                .priceWithDiscount(helper.priceCounter(course.getFullPrice(), appDiscount))
                 .client(client)
                 .course(course)
                 .appCloseDate(appCloseDate.substring(0, 25))
-
                 .build();
 
-        applicationService.save(application);
+        Payment payment = Payment.builder()
+                .id(new ObjectId())
+                .application(application)
+                .discount(appDiscount)
+                .priceWithDiscount(new Helper().priceCounter(course.getFullPrice(), appDiscount))
+                .paid(0.0)
+                .leftToPay(new Helper().priceCounter(course.getFullPrice(), appDiscount))
+                .build();
 
         Group group = groupService.findOne(groupSelect);
         group.getClients().add(client);
+
+        application.setPayment(payment);
+        client.getApplications().add(application);
+
+        paymentService.save(payment);
         groupService.save(group);
+        clientService.save(client);
+        commentService.save(comment);
+        applicationService.save(application);
 
         return "redirect:/";
     }

@@ -19,11 +19,12 @@
         </#list>
         </select>
     </label>
-
     <input type="submit" name="" placeholder="">
-
 </form>
-
+<form action="/showAllClients" method="get">
+    <input type="hidden" value="true" name="withoutGroups">
+    <input type="submit" value="Find without groups">
+</form>
 <table class="table table-hover">
     <thead>
     <tr class="bg-primary">
@@ -53,13 +54,8 @@
             <#list client.tagsAboutClient as tag> ${tag}<#sep >,</#list>
         </td>
         <td>lorem ipsum</td>
-
     </tr>
-
-
 </#list>
-
-
 </table>
 <script src="/script/editValueScript.js"></script>
 <script src="/script/select2.js"></script>

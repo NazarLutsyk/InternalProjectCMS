@@ -48,8 +48,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<Client> findClientsWitchNotFromGroup(String groupIdentifier) {
-        return clientDAO.findClientsWitchNotFromGroup(groupIdentifier);
+    public List<Client> findClientsWitchNotFromGroupAndWithApp(String groupIdentifier) {
+        return clientDAO.findClientsWitchNotFromGroupAndWithApp(groupIdentifier);
+    }
+
+    @Override
+    public List<Client> findClientsWithoutGroups() {
+        return clientDAO.findClientsWithoutGroups();
     }
 
 //    @Override

@@ -31,14 +31,11 @@ public class Application {
     private Set<String> tagsAboutApplication = new HashSet<>();
     private String futureCourse;
     private String appCloseDate;
-    private Integer discount;
-    private Double priceWithDiscount;
-    private Double paid;
-    private Double leftToPay;
     private boolean checked = false;
     @Reference
     private Client client;
-
     @Reference
     private Course course;
+    @Reference
+    private Payment payment;
 }

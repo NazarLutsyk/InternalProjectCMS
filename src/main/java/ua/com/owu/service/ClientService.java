@@ -20,6 +20,7 @@ public interface ClientService {
 
     public List<Client> findAllByGroupIdentifier(String groupIdentifier);
 
-    public List<Client> findClientsWitchNotFromGroup(String groupIdentifier);
+    public List<Client> findClientsWitchNotFromGroupAndWithApp(String groupIdentifier);
 
+    List<Client> findClientsWithoutGroups();
 }

@@ -21,9 +21,9 @@ public interface ClientDAO {
 
     List<Client> findAllByGroupIdentifier(String groupIdentifier);
 
-    List<Client> findClientsWitchNotFromGroup(String groupIdentifier);
+    List<Client> findClientsWitchNotFromGroupAndWithApp(String groupIdentifier);
 
-
+    List<Client> findClientsWithoutGroups();
 
 //    public List<Client> findAllByNameOrSurnameOrPhoneOrEmail(String condition);
 }
