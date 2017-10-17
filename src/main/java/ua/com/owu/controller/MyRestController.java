@@ -114,10 +114,16 @@ public class MyRestController {
 
     @PostMapping("/getSocialStatistic")
     public List<String> getSocialStatisticGroupBySocial(@RequestBody Map<String, String> params) {
-        LocalDate startDate = LocalDate.parse(params.get("startDate"));
-        LocalDate endDate = LocalDate.parse(params.get("endDate"));
+        LocalDate startDate;
+        LocalDate endDate;
+        if (!(params.get("startDate").equals("") || params.get("endDate").equals(""))){
+            startDate = LocalDate.parse(params.get("startDate"));
+            endDate = LocalDate.parse(params.get("endDate"));
+        }else {
+            startDate = new LocalDate(1970,1,1);
+            endDate = new LocalDate(3000,1,1);
+        }
         List<String> statistic = applicationService.getSocialStatisticByPeriod(startDate, endDate);
-        System.out.println("Statistic by social:\n" + statistic);
         return statistic;
     }
 }

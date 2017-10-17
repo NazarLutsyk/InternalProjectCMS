@@ -3,11 +3,14 @@ package ua.com.owu.configs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
+
+import java.io.File;
 
 @Configuration
 @EnableWebMvc
@@ -34,10 +37,19 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return configurer;
     }
 
+    @Bean
+    public StandardServletMultipartResolver multipartResolver() {
+        return new StandardServletMultipartResolver();
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/style/**").addResourceLocations("/static/styles/");
         registry.addResourceHandler("/images/**").addResourceLocations("/images/");
+        registry.addResourceHandler("/fakeAccountImage/**")
+                .addResourceLocations("file:" + System.getProperty("user.home")
+                        + File.separator + "UniversityCRMImages" + File.separator
+                        + "FakeAccountsImages" + File.separator);
         registry.addResourceHandler("/script/**").addResourceLocations("/static/scripts/");
         registry.addResourceHandler("/externalLibsJs/jQuery/**").addResourceLocations("/static/externalLibsJs/jQuery/");
         registry.addResourceHandler("/externalLibsJs/select2JS/**").addResourceLocations("/static/externalLibsJs/select2-4.0.3/dist/js/");

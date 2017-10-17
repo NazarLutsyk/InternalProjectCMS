@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, fakeUser-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title></title>
     <script src="/externalLibsJs/jQuery/jquery-3.2.1.min.js"></script>
@@ -45,7 +45,9 @@
     <li><a href="/showAllCourses">Курсы</a></li>
     <li><a href="/showAllGroups">Группы</a></li>
     <li><a href="/analitics">Аналитика</a></li>
-    <form action="ё/logout" method="post" style="float: right">
+    <li><a href="/showFakeUsers">Фейковые юзери</a></li>
+    <li><a href="/showFakeAccounts">Фейковые аккаунты</a></li>
+    <form action="/logout" method="post" style="float: right">
         <input type="submit" value="Logout">
     </form>
 </ol>

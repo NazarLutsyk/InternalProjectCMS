@@ -6,14 +6,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import ua.com.owu.entity.*;
 import ua.com.owu.entity.enums.Social;
+import ua.com.owu.entity.seo.FakeAccount;
+import ua.com.owu.entity.seo.FakeUser;
 import ua.com.owu.service.*;
 import ua.com.owu.service.util.Helper;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class CreateController {
@@ -35,6 +41,12 @@ public class CreateController {
 
     @Autowired
     private PaymentService paymentService;
+
+    @Autowired
+    private FakeUserService fakeUserService;
+
+    @Autowired
+    private FakeAccountService fakeAccountService;
 
     @PostMapping("/createCourse")
     public String createCourse(
@@ -273,10 +285,91 @@ public class CreateController {
                 .text(text)
                 .build();
         client.getCommentsAboutClient().add(comment);
-
         commentService.save(comment);
         clientService.save(client);
-
         return "redirect:/client/" + clientId;
     }
+
+    @PostMapping("/createFakeUser")
+    public String createFakeAccount(@RequestParam String name,
+                                    @RequestParam String surname,
+                                    @RequestParam String phone,
+                                    @RequestParam String email,
+                                    @RequestParam String userComment,
+                                    @RequestParam MultipartFile image,
+                                    @RequestParam(required = false) List<String> fakeAccounts) throws ParseException {
+        FakeUser fakeUser = FakeUser.builder()
+                .id(new ObjectId())
+                .name(name)
+                .surname(surname)
+                .phone(phone)
+                .email(email)
+                .build();
+        fakeUser.setFakeUserComments(new ArrayList<>());
+        fakeUser.getFakeUserComments().add(userComment);
+
+        if (new Helper().checkImageExt(image)) {
+            String realPath = System.getProperty("user.home")
+                    + File.separator + "UniversityCRMImages" + File.separator
+                    + "FakeAccountsImages" + File.separator;
+            String fileName = fakeUser.getName()
+                    + fakeUser.getSurname()
+                    + UUID.randomUUID()
+                    + new Helper().getFileExt(image);
+            fakeUser.setImages(new ArrayList<>());
+            fakeUser.getImages().add("fakeAccountImage/" + fileName);
+            try {
+                File file = new File(realPath);
+                if (!file.exists())
+                    file.mkdirs();
+                image.transferTo(new File(realPath + fileName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (fakeAccounts != null) {
+            ArrayList<FakeAccount> tempAccounts = new ArrayList<>();
+            for (String fakeAccountId : fakeAccounts) {
+                FakeAccount fakeAccount = fakeAccountService.findById(fakeAccountId);
+                fakeAccount.setFakeUser(fakeUser);
+                fakeUser.getFakeAccounts().add(fakeAccount);
+                tempAccounts.add(fakeAccount);
+            }
+            fakeAccountService.save(tempAccounts);
+        }
+        fakeUserService.save(fakeUser);
+        return "redirect:/showFakeUsers";
+    }
+
+    @PostMapping("/createFakeAccount")
+    public String createSite(@RequestParam String login,
+                             @RequestParam String password,
+                             @RequestParam String url,
+                             @RequestParam String registrationDate,
+                             @RequestParam String lastVisitDate,
+                             @RequestParam(required = false, defaultValue = "") String fakeUserId,
+                             @RequestParam String accComment) throws URISyntaxException, ParseException {
+        FakeAccount fakeAccount = FakeAccount.builder()
+                .id(new ObjectId())
+                .login(login)
+                .password(password)
+                .siteUri(new URI(url))
+                .registrationDate(new Helper().dateFormaterWithoutTime(registrationDate))
+                .lastVisitDate(new Helper().dateFormaterWithoutTime(lastVisitDate))
+                .build();
+        fakeAccount.setFakeAccountComments(new ArrayList<>());
+        fakeAccount.getFakeAccountComments().add(accComment);
+
+        if (!fakeUserId.equals("")) {
+            FakeUser fakeUser = fakeUserService.findById(fakeUserId);
+            fakeUser.getFakeAccounts().add(fakeAccount);
+            fakeAccount.setFakeUser(fakeUser);
+            fakeUserService.save(fakeUser);
+        }
+        fakeAccountService.save(fakeAccount);
+        return "redirect:/showFakeAccounts";
+    }
+
+
 }

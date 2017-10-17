@@ -29,7 +29,6 @@
     </label>
 
     <input type="submit" name="" placeholder="">
-
 </form>
 
 <h2>создание заявки</h2>

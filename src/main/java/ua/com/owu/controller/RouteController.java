@@ -2,23 +2,17 @@ package ua.com.owu.controller;
 
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.owu.entity.Application;
 import ua.com.owu.entity.Client;
 import ua.com.owu.entity.Group;
 import ua.com.owu.entity.enums.Social;
-import ua.com.owu.service.ApplicationService;
-import ua.com.owu.service.ClientService;
-import ua.com.owu.service.CourseService;
-import ua.com.owu.service.GroupService;
+import ua.com.owu.service.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -33,6 +27,10 @@ public class RouteController {
     private ClientService clientService;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private FakeUserService fakeUserService;
+    @Autowired
+    private FakeAccountService fakeAccountService;
 
 
     @GetMapping("/")
@@ -85,8 +83,7 @@ public class RouteController {
             LocalDate startDateOfCourse = startDate.equals("") ? null : new LocalDate(startDate);
             LocalDate endDateOfCourse = endDate.equals("") ? null : new LocalDate(endDate);
             groups = groupService.filterByCourseAndPeriod(course, startDateOfCourse, endDateOfCourse);
-        }
-        else
+        } else
             groups = groupService.findAll();
         model.addAttribute("courses", courseService.findAll());
         model.addAttribute("clients", clientService.findAll());
@@ -127,6 +124,21 @@ public class RouteController {
     @GetMapping("/analitics")
     public String getAnaliticPage() {
         return "analiticPage";
+    }
+
+    @GetMapping("/showFakeUsers")
+    public String getSitePage(Model model) {
+        model.addAttribute("fakeUsers", fakeUserService.findAll());
+        model.addAttribute("fakeAccounts", fakeAccountService.findAll());
+        model.addAttribute("accountsWithoutUser", fakeAccountService.findAllWithoutUser());
+        return "showAllFakeUsersPage";
+    }
+
+    @GetMapping("/showFakeAccounts")
+    public String getFakeAccountsPage(Model model) {
+        model.addAttribute("fakeUsers", fakeUserService.findAll());
+        model.addAttribute("fakeAccounts", fakeAccountService.findAll());
+        return "showAllFakeAccPage";
     }
 
 }

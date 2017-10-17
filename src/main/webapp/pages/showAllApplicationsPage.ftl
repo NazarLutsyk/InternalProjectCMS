@@ -1,8 +1,5 @@
-<#include "templates/header.ftl">
-
-<h2>создание заявки</h2>
+<#include "templates/header.ftl"><h2>создание заявки</h2>
 <form action="/createApplication" method="post">
-
     <label for="">время подачи заявки<input type="datetime-local" name="appReciveDate"
                                             placeholder="appReciveDate"></label>
     <label for="">откуда узнал
@@ -26,7 +23,6 @@
                 <option value="${client.id}">${client.name} ${client.surname} </option>
             </#list>
         </select>
-
     </label>
 </#if>
 <#if courses??>
@@ -38,7 +34,6 @@
         </select>
 
     </label>
-
 </#if>
     <label for="">скидка
         <input type="number" min="0" name="discount" placeholder="discount">
