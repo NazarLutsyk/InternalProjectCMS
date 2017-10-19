@@ -39,7 +39,17 @@
         <td>${fakeAccount.lastVisitDate?string('dd-MM-yyyy')}</td>
         <td>
             <#if fakeAccount.fakeUser??>
-                 ${fakeAccount.fakeUser.name}${fakeAccount.fakeUser.surname}
+                <div>
+                 <a href="/fakeUser/${fakeAccount.fakeUser.id}">
+                    ${fakeAccount.fakeUser.name}${fakeAccount.fakeUser.surname}
+                 </a>
+                    <form action="/disconnectAccount" method="post"
+                          style="display: inline-block; float: right; clear: both;">
+                        <input type="hidden" name="disconnectAccountId"
+                               value="${fakeAccount.id}"/>
+                        <input type="submit" value="Отвязать"/>
+                    </form>
+                </div>
             </#if>
         </td>
         <td>

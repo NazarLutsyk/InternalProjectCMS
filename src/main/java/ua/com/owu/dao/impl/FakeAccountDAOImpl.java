@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import ua.com.owu.dao.FakeAccountDAO;
 import ua.com.owu.entity.seo.FakeAccount;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class FakeAccountDAOImpl implements FakeAccountDAO {
@@ -52,5 +51,13 @@ public class FakeAccountDAOImpl implements FakeAccountDAO {
         List<FakeAccount> accounts = query.asList();
         System.out.println("Found accounts without user:" + accounts);
         return accounts;
+    }
+
+    @Override
+    public List<FakeAccount> findAllByIds(Set<String> ids) {
+        List<FakeAccount> clients = new ArrayList<>();
+        ids.forEach(id -> clients.add(findById(id)));
+        System.out.println("All accounts by ids:" + clients);
+        return clients;
     }
 }

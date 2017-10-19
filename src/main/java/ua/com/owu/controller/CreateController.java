@@ -14,6 +14,8 @@ import ua.com.owu.entity.seo.FakeUser;
 import ua.com.owu.service.*;
 import ua.com.owu.service.util.Helper;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -304,8 +306,10 @@ public class CreateController {
                 .surname(surname)
                 .phone(phone)
                 .email(email)
+                .fakeUserComments(new ArrayList<>())
+                .images(new ArrayList<>())
+                .fakeAccounts(new ArrayList<>())
                 .build();
-        fakeUser.setFakeUserComments(new ArrayList<>());
         fakeUser.getFakeUserComments().add(userComment);
 
         if (new Helper().checkImageExt(image)) {
@@ -316,7 +320,6 @@ public class CreateController {
                     + fakeUser.getSurname()
                     + UUID.randomUUID()
                     + new Helper().getFileExt(image);
-            fakeUser.setImages(new ArrayList<>());
             fakeUser.getImages().add("fakeAccountImage/" + fileName);
             try {
                 File file = new File(realPath);
@@ -355,10 +358,10 @@ public class CreateController {
                 .login(login)
                 .password(password)
                 .siteUri(new URI(url))
+                .fakeAccountComments(new ArrayList<>())
                 .registrationDate(new Helper().dateFormaterWithoutTime(registrationDate))
                 .lastVisitDate(new Helper().dateFormaterWithoutTime(lastVisitDate))
                 .build();
-        fakeAccount.setFakeAccountComments(new ArrayList<>());
         fakeAccount.getFakeAccountComments().add(accComment);
 
         if (!fakeUserId.equals("")) {
@@ -369,6 +372,43 @@ public class CreateController {
         }
         fakeAccountService.save(fakeAccount);
         return "redirect:/showFakeAccounts";
+    }
+
+    @PostMapping("/disconnectAccount")
+    public void disconnectAccount(@RequestParam String disconnectAccountId,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response) throws IOException {
+        FakeAccount fakeAccount = fakeAccountService.findById(disconnectAccountId);
+        FakeUser fakeUser = fakeAccount.getFakeUser();
+        fakeAccount.setFakeUser(null);
+        for (FakeAccount account : fakeUser.getFakeAccounts()) {
+            if (account == fakeAccount){
+                fakeUser.getFakeAccounts().remove(account);
+                break;
+            }
+        }
+        fakeAccountService.save(fakeAccount);
+        fakeUserService.save(fakeUser);
+
+        response.sendRedirect(request.getHeader("referer"));
+
+    }
+
+    @PostMapping("/connectAccountsToUser")
+    public String connectAccountsToUser(@RequestParam String userId,
+                                        @RequestParam Set<String> freeAccounts) {
+        FakeUser fakeUser = fakeUserService.findById(userId);
+        List<FakeAccount> freeFakeAccounts = fakeAccountService.findAllByIds(freeAccounts);
+
+        for (FakeAccount freeFakeAccount : freeFakeAccounts) {
+            if (freeFakeAccount.getFakeUser() == null) {
+                freeFakeAccount.setFakeUser(fakeUser);
+                fakeUser.getFakeAccounts().add(freeFakeAccount);
+            }
+        }
+        fakeAccountService.save(freeFakeAccounts);
+        fakeUserService.save(fakeUser);
+        return "redirect:/fakeUser/"+userId;
     }
 
 

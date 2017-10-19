@@ -8,6 +8,7 @@ import ua.com.owu.service.FakeAccountService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class FakeAccountServiceImpl implements FakeAccountService {
@@ -37,5 +38,10 @@ public class FakeAccountServiceImpl implements FakeAccountService {
     @Override
     public List<FakeAccount> findAllWithoutUser() {
         return fakeAccountDAO.findAllWithoutUser();
+    }
+
+    @Override
+    public List<FakeAccount> findAllByIds(Set<String> ids) {
+        return fakeAccountDAO.findAllByIds(ids);
     }
 }

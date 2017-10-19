@@ -141,4 +141,11 @@ public class RouteController {
         return "showAllFakeAccPage";
     }
 
+    @GetMapping("/fakeUser/{id}")
+    public String getFakeUserPage(@PathVariable String id,Model model) {
+        model.addAttribute("fakeUser",fakeUserService.findById(id));
+        model.addAttribute("freeAccounts",fakeAccountService.findAllWithoutUser());
+        return "showFakeUserPage";
+    }
+
 }

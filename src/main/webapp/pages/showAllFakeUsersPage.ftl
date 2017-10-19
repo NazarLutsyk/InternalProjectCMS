@@ -30,7 +30,7 @@
     </thead>
 <#list fakeUsers as user>
     <tr>
-        <td>${user.name}</td>
+        <td><a href="/fakeUser/${user.id}">${user.name}</a></td>
         <td>${user.surname}</td>
         <td>${user.phone}</td>
         <td>${user.email}</td>
@@ -51,7 +51,15 @@
         <td>
             <ul>
                 <#list user.fakeAccounts as fakeAccount>
-                    <li>${fakeAccount.siteUri}</li>
+                    <div>
+                    ${fakeAccount.siteUri}
+                        <form action="/disconnectAccount" method="post"
+                              style="display: inline-block; float: right; clear: both;">
+                            <input type="hidden" name="disconnectAccountId"
+                                   value="${fakeAccount.id}"/>
+                            <input type="submit" value="Отвязать"/>
+                        </form>
+                    </div>
                 </#list>
             </ul>
         </td>
