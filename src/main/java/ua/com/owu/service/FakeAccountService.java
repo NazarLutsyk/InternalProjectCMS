@@ -19,4 +19,6 @@ public interface FakeAccountService {
 
     List<FakeAccount> findAllByIds(Set<String> ids);
 
+    void delete(String id);
+
 }

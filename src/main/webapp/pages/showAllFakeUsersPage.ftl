@@ -6,14 +6,6 @@
     <label for="">Мейл<input type="email" name="email" placeholder="email" required></label>
     <label for="">Комментарий<input type="text" name="userComment" placeholder="comment" required></label>
     <label for="">Изображение<input type="file" name="image" placeholder="image" required></label>
-    <label for="fakeAccounts"> Выбрать аккаунты
-        <select class="js-example-basic-multiple js-states form-control" id="fakeAccounts" name="fakeAccounts"
-                multiple="multiple">
-        <#list accountsWithoutUser as fakeAccount>
-            <option value="${fakeAccount.id}">${fakeAccount.siteUri}</option>
-        </#list>
-        </select>
-    </label>
     <input type="submit" name="" placeholder="">
 </form>
 <table class="table table-hover">
@@ -51,15 +43,7 @@
         <td>
             <ul>
                 <#list user.fakeAccounts as fakeAccount>
-                    <div>
-                    ${fakeAccount.siteUri}
-                        <form action="/disconnectAccount" method="post"
-                              style="display: inline-block; float: right; clear: both;">
-                            <input type="hidden" name="disconnectAccountId"
-                                   value="${fakeAccount.id}"/>
-                            <input type="submit" value="Отвязать"/>
-                        </form>
-                    </div>
+                    <li>${fakeAccount.siteUri}</li>
                 </#list>
             </ul>
         </td>

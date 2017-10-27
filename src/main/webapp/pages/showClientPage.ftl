@@ -112,7 +112,11 @@
             </ol>
         </td>
         <td>
-            <button name="deleteFromGroup" value="${group.id}">Exit</button>
+            <form action="/deleteFromGroup" method="post">
+                <input type="hidden" name="groupId" value="${group.id}">
+                <input type="hidden" name="clientId" value="${client.id}">
+                <input type="submit" value="Exit">
+            </form>
         </td>
     </tr>
 </#list>
@@ -158,24 +162,5 @@
             }
         });
     });
-    $("button[name = 'deleteFromGroup']").click(function () {
-        let group = $(this).val();
-        let params = {
-            groupId: group,
-            clientId: clientId
-        };
-        $.ajax({
-            url:"/deleteFromGroup",
-            method:"post",
-            contentType:"application/json",
-            data:JSON.stringify(params),
-            success:function () {
-                location.reload(true);
-            }
-        });
-    });
-    function reverseAppCheck() {
-
-    }
 </script>
 </html>

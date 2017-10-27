@@ -60,4 +60,10 @@ public class FakeAccountDAOImpl implements FakeAccountDAO {
         System.out.println("All accounts by ids:" + clients);
         return clients;
     }
+
+    @Override
+    public void delete(String id) {
+        datastore.delete(FakeAccount.class, new ObjectId(id));
+        System.out.println("Fake account deleted");
+    }
 }

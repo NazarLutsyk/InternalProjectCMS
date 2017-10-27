@@ -21,7 +21,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
 
 @Controller
 public class CreateController {
@@ -181,14 +183,34 @@ public class CreateController {
 
 
     @PostMapping("/fillGroup")
-    public String fillGroup(@RequestParam String group, @RequestParam Set<String> clients) {
+    public void fillGroup(@RequestParam String group,
+                            @RequestParam Set<String> clients,
+                            HttpServletRequest request,
+                            HttpServletResponse response) throws IOException {
         Group grp = groupService.findOne(group);
         Set<Client> clientSet = clientService.findAll(clients);
         clientSet.forEach(client -> client.getGroups().add(grp));
         grp.setClients(clientSet);
         clientService.save(clientSet);
         groupService.save(grp);
-        return "redirect:/adminPage";
+        response.sendRedirect(request.getHeader("referer"));
+    }
+
+    @PostMapping("/deleteFromGroup")
+    public void deleteFromGroup(@RequestParam String groupId,
+                                @RequestParam String clientId,
+                                HttpServletRequest request,
+                                HttpServletResponse response) throws IOException {
+        Group group = groupService.findOne(groupId);
+        Client client = clientService.findOne(clientId);
+
+        client.getGroups().remove(group);
+        group.getClients().remove(client);
+
+        groupService.save(group);
+        clientService.save(client);
+
+        response.sendRedirect(request.getHeader("referer"));
     }
 
 
@@ -298,8 +320,7 @@ public class CreateController {
                                     @RequestParam String phone,
                                     @RequestParam String email,
                                     @RequestParam String userComment,
-                                    @RequestParam MultipartFile image,
-                                    @RequestParam(required = false) List<String> fakeAccounts) throws ParseException {
+                                    @RequestParam MultipartFile image) throws ParseException {
         FakeUser fakeUser = FakeUser.builder()
                 .id(new ObjectId())
                 .name(name)
@@ -331,16 +352,6 @@ public class CreateController {
             }
         }
 
-        if (fakeAccounts != null) {
-            ArrayList<FakeAccount> tempAccounts = new ArrayList<>();
-            for (String fakeAccountId : fakeAccounts) {
-                FakeAccount fakeAccount = fakeAccountService.findById(fakeAccountId);
-                fakeAccount.setFakeUser(fakeUser);
-                fakeUser.getFakeAccounts().add(fakeAccount);
-                tempAccounts.add(fakeAccount);
-            }
-            fakeAccountService.save(tempAccounts);
-        }
         fakeUserService.save(fakeUser);
         return "redirect:/showFakeUsers";
     }
@@ -351,7 +362,7 @@ public class CreateController {
                              @RequestParam String url,
                              @RequestParam String registrationDate,
                              @RequestParam String lastVisitDate,
-                             @RequestParam(required = false, defaultValue = "") String fakeUserId,
+                             @RequestParam String fakeUserId,
                              @RequestParam String accComment) throws URISyntaxException, ParseException {
         FakeAccount fakeAccount = FakeAccount.builder()
                 .id(new ObjectId())
@@ -364,52 +375,28 @@ public class CreateController {
                 .build();
         fakeAccount.getFakeAccountComments().add(accComment);
 
-        if (!fakeUserId.equals("")) {
-            FakeUser fakeUser = fakeUserService.findById(fakeUserId);
-            fakeUser.getFakeAccounts().add(fakeAccount);
-            fakeAccount.setFakeUser(fakeUser);
-            fakeUserService.save(fakeUser);
-        }
+        FakeUser fakeUser = fakeUserService.findById(fakeUserId);
+        fakeUser.getFakeAccounts().add(fakeAccount);
+        fakeAccount.setFakeUser(fakeUser);
+
+        fakeUserService.save(fakeUser);
         fakeAccountService.save(fakeAccount);
-        return "redirect:/showFakeAccounts";
+        return "redirect:/fakeUser/"+fakeUser.getId().toString();
     }
 
-    @PostMapping("/disconnectAccount")
-    public void disconnectAccount(@RequestParam String disconnectAccountId,
-                                  HttpServletRequest request,
-                                  HttpServletResponse response) throws IOException {
-        FakeAccount fakeAccount = fakeAccountService.findById(disconnectAccountId);
+    @PostMapping("/deleteAccount")
+    public String deleteAccount(@RequestParam String accountId) throws IOException {
+        FakeAccount fakeAccount = fakeAccountService.findById(accountId);
         FakeUser fakeUser = fakeAccount.getFakeUser();
-        fakeAccount.setFakeUser(null);
         for (FakeAccount account : fakeUser.getFakeAccounts()) {
-            if (account == fakeAccount){
+            if (account == fakeAccount) {
                 fakeUser.getFakeAccounts().remove(account);
                 break;
             }
         }
-        fakeAccountService.save(fakeAccount);
+        fakeAccountService.delete(fakeAccount.getId().toString());
         fakeUserService.save(fakeUser);
 
-        response.sendRedirect(request.getHeader("referer"));
-
+        return "redirect:/fakeUser/"+fakeUser.getId().toString();
     }
-
-    @PostMapping("/connectAccountsToUser")
-    public String connectAccountsToUser(@RequestParam String userId,
-                                        @RequestParam Set<String> freeAccounts) {
-        FakeUser fakeUser = fakeUserService.findById(userId);
-        List<FakeAccount> freeFakeAccounts = fakeAccountService.findAllByIds(freeAccounts);
-
-        for (FakeAccount freeFakeAccount : freeFakeAccounts) {
-            if (freeFakeAccount.getFakeUser() == null) {
-                freeFakeAccount.setFakeUser(fakeUser);
-                fakeUser.getFakeAccounts().add(freeFakeAccount);
-            }
-        }
-        fakeAccountService.save(freeFakeAccounts);
-        fakeUserService.save(fakeUser);
-        return "redirect:/fakeUser/"+userId;
-    }
-
-
 }

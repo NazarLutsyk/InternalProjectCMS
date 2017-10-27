@@ -104,8 +104,12 @@ public class RouteController {
     }
 
     @GetMapping("/showClientsFromGroup/{groupId}")
-    public String showClientsFromGroup(@PathVariable String groupId, Model model) {
-        model.addAttribute("clients", clientService.findAllByGroupIdentifier(groupId));
+    public String showClientsFromGroup(@PathVariable("groupId") String groupName, Model model) {
+        Group group = groupService.findOneByGroupName(groupName);
+        model.addAttribute("clients", clientService.findAllByGroupIdentifier(groupName));
+        model.addAttribute("otherClients",
+                clientService.findClientsWitchNotFromGroupAndWithApp(group.getId().toString()));
+        model.addAttribute("group", group);
         return "showClientsFromGroup";
     }
 
@@ -129,22 +133,12 @@ public class RouteController {
     @GetMapping("/showFakeUsers")
     public String getSitePage(Model model) {
         model.addAttribute("fakeUsers", fakeUserService.findAll());
-        model.addAttribute("fakeAccounts", fakeAccountService.findAll());
-        model.addAttribute("accountsWithoutUser", fakeAccountService.findAllWithoutUser());
         return "showAllFakeUsersPage";
-    }
-
-    @GetMapping("/showFakeAccounts")
-    public String getFakeAccountsPage(Model model) {
-        model.addAttribute("fakeUsers", fakeUserService.findAll());
-        model.addAttribute("fakeAccounts", fakeAccountService.findAll());
-        return "showAllFakeAccPage";
     }
 
     @GetMapping("/fakeUser/{id}")
     public String getFakeUserPage(@PathVariable String id,Model model) {
         model.addAttribute("fakeUser",fakeUserService.findById(id));
-        model.addAttribute("freeAccounts",fakeAccountService.findAllWithoutUser());
         return "showFakeUserPage";
     }
 

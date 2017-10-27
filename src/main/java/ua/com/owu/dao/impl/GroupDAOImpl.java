@@ -46,6 +46,16 @@ public class GroupDAOImpl implements GroupDAO {
     }
 
     @Override
+    public Group findOneByGroupName(String name) {
+        Group group = datastore.find(Group.class)
+                .field("groupIdentifier")
+                .equal(name)
+                .get();
+        System.out.println("Found group by group name:" + group);
+        return group;
+    }
+
+    @Override
     public List<Group> filterByCourseAndPeriod(String course, LocalDate startDate, LocalDate endDate) {
         List<Group> groups;
         Query<Group> query = datastore.createQuery(Group.class);

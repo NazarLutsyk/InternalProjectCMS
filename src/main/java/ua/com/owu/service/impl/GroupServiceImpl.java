@@ -37,4 +37,9 @@ public class GroupServiceImpl implements GroupService {
         return groupDAO.filterByCourseAndPeriod(course, startDate, endDate);
     }
 
+    @Override
+    public Group findOneByGroupName(String name) {
+        return groupDAO.findOneByGroupName(name);
+    }
+
 }

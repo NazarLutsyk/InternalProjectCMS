@@ -44,4 +44,9 @@ public class FakeAccountServiceImpl implements FakeAccountService {
     public List<FakeAccount> findAllByIds(Set<String> ids) {
         return fakeAccountDAO.findAllByIds(ids);
     }
+
+    @Override
+    public void delete(String id) {
+        fakeAccountDAO.delete(id);
+    }
 }

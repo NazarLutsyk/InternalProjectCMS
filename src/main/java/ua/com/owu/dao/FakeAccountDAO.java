@@ -19,4 +19,5 @@ public interface FakeAccountDAO {
 
     List<FakeAccount> findAllByIds(Set<String> ids);
 
+    void delete(String id);
 }

@@ -13,5 +13,7 @@ public interface GroupDAO {
 
     Group findOne(String id);
 
+    Group findOneByGroupName(String name);
+
     List<Group> filterByCourseAndPeriod(String course, LocalDate startDate, LocalDate endDate);
 }

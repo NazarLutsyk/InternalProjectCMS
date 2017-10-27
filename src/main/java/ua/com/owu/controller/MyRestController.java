@@ -92,21 +92,6 @@ public class MyRestController {
         clientService.save(client);
     }
 
-    @PostMapping("/deleteFromGroup")
-    public void deleteFromGroup(@RequestBody Map<String, String> params) {
-        String groupId = params.get("groupId");
-        String clientId = params.get("clientId");
-
-        Group group = groupService.findOne(groupId);
-        Client client = clientService.findOne(clientId);
-
-        client.getGroups().remove(group);
-        group.getClients().remove(client);
-
-        groupService.save(group);
-        clientService.save(client);
-    }
-
     @PostMapping("/reverseAppIsCheck")
     public void reverseAppIsCheck(@RequestBody String appId) {
         applicationService.reverseChecker(appId);
