@@ -7,51 +7,22 @@
 
     <input type="submit" name="">
 </form>
-<table class="table table-hover">
+<table class="table table-hover" path="/liveEditCourse">
     <thead>
     <tr class="bg-primary">
         <th>название</th>
         <th>цена</th>
-
     </tr>
     </thead>
 <#list courses as course>
-    <tr courseID="${course.id}">
+    <tr entityID="${course.id}">
         <td field="courseTitle">${course.courseTitle}</td>
         <td field="fullPrice">${course.fullPrice?c}</td>
-
     </tr>
 </#list>
 </table>
-<script>
-    $('td').dblclick(function () {
-        $(this).attr("contenteditable", 'true').focus();
-    });
 
-    $('td').blur(function () {
-        let course = {};
-        let $parent = $(this).parent();
-        $parent.children().each(function () {
-            course[$(this).attr('field')] = $(this).text();
-            course.id = $parent.attr('courseID');
-        });
-        console.log(course);
-
-
-        $.ajax("/liveEditCourse", {
-            type: 'POST',
-            data: JSON.stringify(course),
-            contentType: 'application/json;charset=utf-8',
-            success: function () {
-            },
-            error: function (err) {
-                console.log(err);
-                alert("no!");
-            }
-        });
-    });
-
-</script>
 </body>
-
 </html>
+
+<script src="/script/edits/liveEdit.js"></script>

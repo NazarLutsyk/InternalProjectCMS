@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import ua.com.owu.dao.ApplicationDAO;
 import ua.com.owu.entity.Application;
 import ua.com.owu.entity.Client;
+import ua.com.owu.entity.Social;
 
 import java.util.*;
 
@@ -79,11 +80,12 @@ public class ApplicationDAOImpl implements ApplicationDAO {
     }
 
     @Override
-    public List<String> getSocialStatisticByPeriod(LocalDate startDate, LocalDate endDate) {
+    public List<String> getSocialStatisticByPeriod(LocalDate startDate, LocalDate endDate, Collection<Social> socials) {
         Query<Application> query = datastore.createQuery(Application.class);
         CriteriaContainer and = query.and(
                 query.criteria("appReciveDate").greaterThanOrEq(startDate.toDate()),
-                query.criteria("appReciveDate").lessThanOrEq(endDate.toDate())
+                query.criteria("appReciveDate").lessThanOrEq(endDate.toDate()),
+                query.criteria("source").hasAnyOf(socials)
         );
         Iterator<Document> aggregate = datastore.
                 createAggregation(Application.class)

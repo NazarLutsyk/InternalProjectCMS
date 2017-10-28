@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.owu.entity.Application;
 import ua.com.owu.entity.Client;
 import ua.com.owu.entity.Group;
-import ua.com.owu.entity.enums.Social;
 import ua.com.owu.service.*;
 
 import java.util.List;
@@ -31,16 +30,12 @@ public class RouteController {
     private FakeUserService fakeUserService;
     @Autowired
     private FakeAccountService fakeAccountService;
+    @Autowired
+    private SocialService socialService;
 
 
     @GetMapping("/")
     public String starter(Model model) {
-
-        model.addAttribute("clients", clientService.findAll());
-        model.addAttribute("courses", courseService.findAll());
-        model.addAttribute("groups", groupService.findAll());
-        model.addAttribute("applications", applicationService.findAll());
-
         return "index";
     }
 
@@ -50,7 +45,7 @@ public class RouteController {
         model.addAttribute("clients", clientService.findAll());
         model.addAttribute("courses", courseService.findAll());
         model.addAttribute("groups", groupService.findAll());
-        model.addAttribute("sources", Social.values());
+        model.addAttribute("sources", socialService.findAll());
         return "adminPage";
     }
 
@@ -60,8 +55,16 @@ public class RouteController {
         model.addAttribute("courses", courseService.findAll());
         model.addAttribute("groups", groupService.findAll());
         model.addAttribute("applications", applicationService.findAll());
-        model.addAttribute("sources", Social.values());
+        model.addAttribute("sources", socialService.findAll());
         return "showAllApplicationsPage";
+    }
+
+    @GetMapping("/payments/{appId}")
+    public String showAllPayments(@PathVariable String appId, Model model) {
+        Application one = applicationService.findOne(appId);
+        model.addAttribute("payments",one.getPayments());
+        model.addAttribute("application",one);
+        return "appPaymentPage";
     }
 
     @GetMapping("/showAllCourses")
@@ -126,7 +129,8 @@ public class RouteController {
     }
 
     @GetMapping("/analitics")
-    public String getAnaliticPage() {
+    public String getAnaliticPage(Model model) {
+        model.addAttribute("sources",socialService.findAll());
         return "analiticPage";
     }
 

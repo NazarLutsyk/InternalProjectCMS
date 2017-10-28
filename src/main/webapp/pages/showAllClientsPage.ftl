@@ -21,11 +21,13 @@
     </label>
     <input type="submit" name="" placeholder="">
 </form>
+<#--todo maybe will add search by checked app and groups?-->
 <form action="/showAllClients" method="get">
     <input type="hidden" value="true" name="withoutGroups">
     <input type="submit" value="Find without groups">
 </form>
-<table class="table table-hover">
+
+<table id="clientsTable" class="table table-hover" path="/liveEditClient">
     <thead>
     <tr class="bg-primary">
         <td>имя</td>
@@ -35,30 +37,33 @@
         <td>город</td>
         <td>ком клиента</td>
         <td>теги</td>
-        <td>additional info</td>
     </tr>
     </thead>
 <#list clients as client>
-    <tr class="${client.id}">
-        <td class="name"><a href="/client/${client.id}">${client.name}</a></td>
-        <td class="surname">${client.surname}</td>
-        <td class="phoneNumber">${client.phoneNumber}</td>
-        <td class="email">${client.email}</td>
-        <td class="city">${client.city}</td>
-        <td class="commentAboutClient">
-            <#list client.commentsAboutClient as comm>
-                ${comm.text}<br>
-            </#list>
+    <tr entityID="${client.id}">
+        <td field="name" class="name"><a href="/client/${client.id}">${client.name}</a></td>
+        <td field="surname" class="surname">${client.surname}</td>
+        <td field="phoneNumber" class="phoneNumber">${client.phoneNumber}</td>
+        <td field="email" class="email">${client.email}</td>
+        <td field="city" class="city">${client.city}</td>
+        <td edit="false">
+            <ul>
+                <#list client.commentsAboutClient as comm>
+                    <li>
+                        ${comm.text}
+                    </li>
+                </#list>
+            </ul>
         </td>
-        <td class="tagsAboutClient">
+        <td class="tagsAboutClient" edit="false">
             <#list client.tagsAboutClient as tag> ${tag}<#sep >,</#list>
         </td>
-        <td>lorem ipsum</td>
     </tr>
 </#list>
 </table>
-<script src="/script/editValueScript.js"></script>
+<script src="/script/edits/liveEdit.js"></script>
 <script src="/script/select2.js"></script>
+<script src="/script/edits/clientLiveEdit.js"></script>
 
 </body>
 </html>

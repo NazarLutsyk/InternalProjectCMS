@@ -36,6 +36,7 @@ public class Client {
     private String email;
     private String city;
     @Reference
+    @JsonIgnore
     private List<Comment> commentsAboutClient = new ArrayList<>();
     private Set<String> tagsAboutClient = new HashSet<>();
     //    private Map<String, String> socials = new HashMap<>();

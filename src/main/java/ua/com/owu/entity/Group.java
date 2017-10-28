@@ -1,5 +1,7 @@
 package ua.com.owu.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -27,9 +29,11 @@ public class Group {
     private String room;
     private Date startDate;
     @Reference
+    @JsonIgnore
     private Set<Client> clients = new HashSet<>();
 
     @Reference
+    @JsonIgnore
     private Course course;
 
 }

@@ -1,5 +1,6 @@
 package ua.com.owu.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -7,11 +8,8 @@ import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Indexed;
 import org.mongodb.morphia.annotations.Reference;
 import org.springframework.format.annotation.DateTimeFormat;
-import ua.com.owu.entity.enums.Social;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -24,7 +22,6 @@ public class Application {
     private ObjectId id;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date appReciveDate;
-    private Social source;
     private String commnetFromClient;
     private String commentFromManager;
     @Indexed
@@ -32,10 +29,20 @@ public class Application {
     private String futureCourse;
     private String appCloseDate;
     private boolean checked = false;
+    private Integer discount;
+    private Double priceWithDiscount;
+    private Double paid;
+    private Double leftToPay;
     @Reference
+    @JsonIgnore
+    private Social source;
+    @Reference
+    @JsonIgnore
     private Client client;
     @Reference
+    @JsonIgnore
     private Course course;
     @Reference
-    private Payment payment;
+    @JsonIgnore
+    private List<Payment> payments = new ArrayList<>();
 }

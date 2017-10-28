@@ -14,7 +14,8 @@ function getColors(count) {
 $("#selectByPeriod").click(function () {
     let params = {
         startDate:$("input[name='startDate']").val(),
-        endDate:$("input[name='endDate']").val()
+        endDate:$("input[name='endDate']").val(),
+        socials:$("#sources").val().join(",")
     };
     $.ajax({
         url: "/getSocialStatistic",

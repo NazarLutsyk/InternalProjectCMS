@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ua.com.owu.entity.*;
-import ua.com.owu.entity.enums.Social;
 import ua.com.owu.entity.seo.FakeAccount;
 import ua.com.owu.entity.seo.FakeUser;
 import ua.com.owu.service.*;
@@ -21,9 +20,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.*;
 
 @Controller
 public class CreateController {
@@ -51,6 +49,9 @@ public class CreateController {
 
     @Autowired
     private FakeAccountService fakeAccountService;
+
+    @Autowired
+    private SocialService socialService;
 
     @PostMapping("/createCourse")
     public String createCourse(
@@ -123,29 +124,26 @@ public class CreateController {
 
         Course crs = courseService.findOne(course);
         Client clientObj = clientService.findOne(client);
+        Social social = socialService.find(source);
 
         Application application
                 = Application.builder()
                 .id(new ObjectId())
                 .appReciveDate(new Helper().dateFormater(appReciveDate))
-                .source(Social.valueOf(source))
+                .source(social)
                 .commnetFromClient(commnetFromClient)
                 .commentFromManager(commentFromManager)
                 .tagsAboutApplication(new Helper().tagsFormater(tagsAboutApplication))
                 .futureCourse(futureCourse)
                 .appCloseDate(appCloseDate.substring(0, 25))
-                .client(clientObj)
-                .course(crs)
-                .build();
-        Payment payment = Payment.builder()
-                .id(new ObjectId())
-                .application(application)
                 .discount(discount)
                 .priceWithDiscount(new Helper().priceCounter(crs.getFullPrice(), discount))
-                .paid(0.0)
                 .leftToPay(new Helper().priceCounter(crs.getFullPrice(), discount))
+                .paid(0.0)
+                .client(clientObj)
+                .course(crs)
+                .payments(new ArrayList<>())
                 .build();
-        application.setPayment(payment);
 
 //        if (clientObj.getApplications() == null){
 //            ArrayList<Application> applications = new ArrayList<>();
@@ -156,8 +154,10 @@ public class CreateController {
 //        }
 
         clientObj.getApplications().add(application);
+        social.getApplications().add(application);
+
+        socialService.save(social);
         applicationService.save(application);
-        paymentService.save(payment);
         clientService.save(clientObj);
         return "redirect:/adminPage";
     }
@@ -175,6 +175,7 @@ public class CreateController {
                 .startDate(new Helper().dateFormater(startDate))
                 .course(crs)
                 .room(room)
+                .clients(new HashSet<>())
                 .build();
 
         groupService.save(group);
@@ -190,7 +191,7 @@ public class CreateController {
         Group grp = groupService.findOne(group);
         Set<Client> clientSet = clientService.findAll(clients);
         clientSet.forEach(client -> client.getGroups().add(grp));
-        grp.setClients(clientSet);
+        grp.getClients().addAll(clientSet);
         clientService.save(clientSet);
         groupService.save(grp);
         response.sendRedirect(request.getHeader("referer"));
@@ -263,9 +264,11 @@ public class CreateController {
         if (appDiscount == 0 || appDiscount == null) appDiscount = 0;
         System.out.println(appDiscount);
 
+        Social social = socialService.find(appSource);
+
         Application application = Application.builder()
                 .appReciveDate(helper.dateFormater(appDateRecive))
-                .source(Social.valueOf(appSource))
+                .source(social)
                 .commnetFromClient(appCommentFromClient)
                 .commentFromManager(appOurComment)
                 .tagsAboutApplication(helper.tagsFormater(appTags))
@@ -273,24 +276,20 @@ public class CreateController {
                 .client(client)
                 .course(course)
                 .appCloseDate(appCloseDate.substring(0, 25))
-                .build();
-
-        Payment payment = Payment.builder()
-                .id(new ObjectId())
-                .application(application)
                 .discount(appDiscount)
                 .priceWithDiscount(new Helper().priceCounter(course.getFullPrice(), appDiscount))
                 .paid(0.0)
                 .leftToPay(new Helper().priceCounter(course.getFullPrice(), appDiscount))
+                .payments(new ArrayList<>())
                 .build();
 
         Group group = groupService.findOne(groupSelect);
         group.getClients().add(client);
 
-        application.setPayment(payment);
         client.getApplications().add(application);
+        social.getApplications().add(application);
 
-        paymentService.save(payment);
+        socialService.save(social);
         groupService.save(group);
         clientService.save(client);
         commentService.save(comment);
@@ -399,4 +398,35 @@ public class CreateController {
 
         return "redirect:/fakeUser/"+fakeUser.getId().toString();
     }
+
+    @PostMapping("/createSource")
+    public String createSource(@RequestParam String name){
+        Social social = new Social();
+        social.setName(name);
+        socialService.save(social);
+        return "redirect:/adminPage";
+    }
+
+    @PostMapping("/createPayment")
+    public String createPayment(@RequestParam Double amount,
+                                @RequestParam String dateOfPayment,
+                                @RequestParam String appId) throws ParseException {
+        Application one = applicationService.findOne(appId);
+        Payment payment = Payment.builder()
+                .id(new ObjectId())
+                .amount(amount)
+                .dateOfPayment(new Helper().dateFormater(dateOfPayment))
+                .application(one)
+                .build();
+        one.getPayments().add(payment);
+
+        one.setPaid(one.getPaid() + payment.getAmount());
+        one.setLeftToPay(one.getLeftToPay() - payment.getAmount());
+
+        paymentService.save(payment);
+        applicationService.save(one);
+
+        return "redirect:/payments/"+appId;
+    }
+
 }

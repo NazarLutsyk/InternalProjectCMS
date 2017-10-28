@@ -15,7 +15,7 @@
     <input type="date" name="endDate">
     <input type="submit">
 </form>
-<table class="table table-hover">
+<table id="groupsTable" class="table table-hover" path="/liveEditGroup">
     <thead>
     <tr class="bg-primary">
         <td>Группа</td>
@@ -26,15 +26,15 @@
     </tr>
     </thead>
 <#list groups as group>
-    <tr>
-        <td><a href="/showClientsFromGroup/${group.groupIdentifier}">${group.groupIdentifier}</a></td>
-        <td>${group.course}</td>
-        <td>
+    <tr entityID="${group.id}">
+        <td field="groupIdentifier"><a href="/showClientsFromGroup/${group.groupIdentifier}">${group.groupIdentifier}</a></td>
+        <td edit="false">${group.course}</td>
+        <td field = "room">
             <#if group.room??> ${group.room}<#else>room undefined</#if>
         </td>
-        <td>${group.startDate?datetime?string("yyyy-MM-dd HH:mm")}</td>
-
-        <td>
+        <#--todo change date format-->
+        <td field = "startDate" type="date">${group.startDate?string("yyyy/MM/dd HH:mm")}</td>
+        <td edit="false">
             <ol>
                 <#list group.clients as client>
                     <li><a href="/client/${client.id}">${client.name} ${client.surname} ${client.phoneNumber}</a></li>
@@ -44,5 +44,6 @@
     </tr>
 </#list>
 </table>
+<script src="/script/edits/liveEdit.js"></script>
 </body>
 </html>

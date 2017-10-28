@@ -1,17 +1,13 @@
 package ua.com.owu.dao;
 
 
-import org.bson.Document;
 import org.joda.time.LocalDate;
 import ua.com.owu.entity.Application;
 import ua.com.owu.entity.Client;
-import ua.com.owu.entity.Group;
-import ua.com.owu.entity.enums.Social;
+import ua.com.owu.entity.Social;
 
-import java.time.Month;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public interface ApplicationDAO{
 
@@ -27,6 +23,6 @@ public interface ApplicationDAO{
 
     void reverseChecker(String appId);
 
-    List<String> getSocialStatisticByPeriod(LocalDate startDate, LocalDate endDate);
+    List<String> getSocialStatisticByPeriod(LocalDate startDate, LocalDate endDate, Collection<Social> socials);
 
 }

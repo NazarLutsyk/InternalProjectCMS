@@ -1,20 +1,18 @@
 package ua.com.owu.controller;
 
+import com.sun.scenario.effect.Merge;
 import org.joda.time.LocalDate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ua.com.owu.dto.ClientDTO;
-import ua.com.owu.entity.Client;
-import ua.com.owu.entity.Course;
-import ua.com.owu.entity.Group;
-import ua.com.owu.service.ApplicationService;
-import ua.com.owu.service.ClientService;
-import ua.com.owu.service.CourseService;
-import ua.com.owu.service.GroupService;
+import ua.com.owu.entity.*;
+import ua.com.owu.service.*;
 import ua.com.owu.service.util.ClientDTOAdapter;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -31,22 +29,40 @@ public class MyRestController {
     private ApplicationService applicationService;
     @Autowired
     private ClientDTOAdapter clientDTOAdapter;
-
-
-    @PostMapping("/editNow")
-    public void editNow(@RequestBody Client client) {
-
-        System.out.println("client from request \n" + client.getTagsAboutClient());
-        client.getTagsAboutClient().forEach(System.out::println);
-        clientService.save(client);
-
-    }
+    @Autowired
+    private SocialService socialService;
 
     @PostMapping("/liveEditCourse")
     public void liveEditCourse(@RequestBody Course course) {
         System.out.println(course);
         courseService.save(course);
-        System.out.println("doneeee");
+    }
+
+    @PostMapping("/liveEditClient")
+    public void liveEditClient(@RequestBody Client client){
+        System.out.println(client);
+        Client oldClient = clientService.findOne(client.getId().toString());
+        BeanUtils.copyProperties(client,oldClient,
+                "commentsAboutClient", "tagsAboutClient", "recomendation", "groups", "applications");
+        clientService.save(oldClient);
+    }
+
+    @PostMapping(value = "/liveEditGroup")
+    public void liveEditGroup(@RequestBody Group group) {
+        System.out.println(group);
+        Group oldGroup = groupService.findOne(group.getId().toString());
+        BeanUtils.copyProperties(group, oldGroup, "clients", "course");
+        groupService.save(oldGroup);
+    }
+
+    @PostMapping("/liveEditApplication")
+    public void liveEditApplication(@RequestBody Application app){
+        System.out.println(app);
+        Application oldApp = applicationService.findOne(app.getId().toString());
+        BeanUtils.copyProperties(app, oldApp,
+                "tagsAboutApplication","client","course","payments","checked","source","discount",
+                "priceWithDiscount","appCloseDate","paid","leftToPay");
+        applicationService.save(oldApp);
     }
 
     @PostMapping(value = "/findClientsWitchNotFromGroup")
@@ -108,7 +124,13 @@ public class MyRestController {
             startDate = new LocalDate(1970,1,1);
             endDate = new LocalDate(3000,1,1);
         }
-        List<String> statistic = applicationService.getSocialStatisticByPeriod(startDate, endDate);
+        List<Social> socials = null;
+        if (params.get("socials").equals("") || params.get("socials").split(",").length == 0)
+            socials = socialService.findAll();
+        else
+            socials = socialService.findAllByIds(Arrays.asList(params.get("socials").split(",")));
+
+        List<String> statistic = applicationService.getSocialStatisticByPeriod(startDate, endDate, socials);
         return statistic;
     }
 }
