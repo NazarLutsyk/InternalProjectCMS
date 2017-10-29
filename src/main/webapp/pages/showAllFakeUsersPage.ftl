@@ -8,7 +8,7 @@
     <label for="">Изображение<input type="file" name="image" placeholder="image" required></label>
     <input type="submit" name="" placeholder="">
 </form>
-<table class="table table-hover">
+<table class="table table-hover" path="/liveEditFakeUser">
     <thead class="bg-primary">
     <tr>
         <td>Имя</td>
@@ -21,26 +21,26 @@
     </tr>
     </thead>
 <#list fakeUsers as user>
-    <tr>
-        <td><a href="/fakeUser/${user.id}">${user.name}</a></td>
-        <td>${user.surname}</td>
-        <td>${user.phone}</td>
-        <td>${user.email}</td>
-        <td>
+    <tr entityID = "${user.id}">
+        <td field="name"><a href="/fakeUser/${user.id}">${user.name}</a></td>
+        <td field="surname">${user.surname}</td>
+        <td field="phone">${user.phone}</td>
+        <td field="email">${user.email}</td>
+        <td edit="false">
             <ul>
                 <#list user.fakeUserComments as comment>
                     <li>${comment}</li>
                 </#list>
             </ul>
         </td>
-        <td>
+        <td edit="false">
             <ul>
                 <#list user.images as image>
                     <li style="float: left"><img src="${image}" height="30px" width="30px"></li>
                 </#list>
             </ul>
         </td>
-        <td>
+        <td edit="false">
             <ul>
                 <#list user.fakeAccounts as fakeAccount>
                     <li>${fakeAccount.siteUri}</li>
@@ -54,6 +54,7 @@
 <script src="/script/spyScript.js"></script>
 <script src="/script/recomendationAjaxSearch.js"></script>
 <script src="/script/select2.js"></script>
+<script src="/script/edits/liveEdit.js"></script>
 
 </body>
 </html>

@@ -16,4 +16,6 @@ public interface GroupDAO {
     Group findOneByGroupName(String name);
 
     List<Group> filterByCourseAndPeriod(String course, LocalDate startDate, LocalDate endDate);
+
+    List<Group> findAllGroupsPossibleAddUser(String userId);
 }

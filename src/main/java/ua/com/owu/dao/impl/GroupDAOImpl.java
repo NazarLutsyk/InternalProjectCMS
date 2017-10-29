@@ -3,21 +3,15 @@ package ua.com.owu.dao.impl;
 import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.aggregation.Projection;
-import org.mongodb.morphia.query.CriteriaContainer;
-import org.mongodb.morphia.query.CriteriaContainerImpl;
 import org.mongodb.morphia.query.Query;
-import org.mongodb.morphia.query.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ua.com.owu.dao.GroupDAO;
-import ua.com.owu.entity.Application;
-import ua.com.owu.entity.Course;
-import ua.com.owu.entity.Group;
+import ua.com.owu.entity.*;
 
+import java.util.HashSet;
 import java.util.List;
-
-import static org.mongodb.morphia.aggregation.Projection.*;
+import java.util.Set;
 
 @Repository
 public class GroupDAOImpl implements GroupDAO {
@@ -91,6 +85,25 @@ public class GroupDAOImpl implements GroupDAO {
         System.out.println("Found filtered groups:" + groups);
         return groups;
 
+    }
+
+    @Override
+    public List<Group> findAllGroupsPossibleAddUser(String userId) {
+        Query<Client> clientQuery = datastore
+                .createQuery(Client.class)
+                .field("id")
+                .equal(new ObjectId(userId));
+        List<Application> applications = clientQuery.get().getApplications();
+        Set<Course> courses = new HashSet<>();
+        applications.forEach(application -> courses.add(application.getCourse()));
+        Query<Group> groupQuery = datastore.createQuery(Group.class);
+        groupQuery.and(
+                groupQuery.criteria("clients").notEqual(clientQuery.get()),
+                groupQuery.criteria("course").hasAnyOf(courses)
+        );
+        List<Group> groups = groupQuery.asList();
+        System.out.println("Find all groups whitch allow add user:" + groups);
+        return groups;
     }
 
 

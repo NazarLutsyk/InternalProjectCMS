@@ -16,7 +16,8 @@ $('td').blur(function () {
             switch ($(this).attr("type")) {
                 case "date": {
                     let regex = /\D/;
-                    entity[$(this).attr('field')] = new Date($(this).text()/*.split(regex)*/);
+                    // console.log($(this).text().split(regex));
+                    entity[$(this).attr('field')] = new Date($(this).text());
                     break;
                 }
                 default: {

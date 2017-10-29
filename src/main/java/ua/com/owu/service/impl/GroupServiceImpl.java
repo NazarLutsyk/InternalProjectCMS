@@ -42,4 +42,9 @@ public class GroupServiceImpl implements GroupService {
         return groupDAO.findOneByGroupName(name);
     }
 
+    @Override
+    public List<Group> findAllGroupsPossibleAddUser(String userId) {
+        return groupDAO.findAllGroupsPossibleAddUser(userId);
+    }
+
 }

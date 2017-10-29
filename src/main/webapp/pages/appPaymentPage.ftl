@@ -13,15 +13,14 @@
         <th>Дата платежа</th>
     </tr>
     </thead>
-<#if payments??>
     <#list payments as payment>
         <tr entityID="${payment.id}">
             <td field="amount">${payment.amount}</td>
-            <td field="dateOfPayment">${payment.dateOfPayment?datetime}</td>
+            <td field="dateOfPayment">${payment.dateOfPayment?string("yyyy")}</td>
         </tr>
     </#list>
-</#if>
 </table>
+
 </body>
 </html>
 

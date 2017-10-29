@@ -86,13 +86,12 @@
     </tr>
 </#list>
 </table>
-<#--&lt;#&ndash;todo change query&ndash;&gt;-->
-<#--<select name="otherGroups">-->
-    <#--<#list otherGroups as group>-->
-        <#--<option value="${group.id}">${group.groupIdentifier}</option>-->
-    <#--</#list>-->
-<#--</select>-->
-<#--<button name="addGroupButton">Add group</button>-->
+<select name="otherGroups">
+    <#list otherGroups as group>
+        <option value="${group.id}">${group.groupIdentifier}</option>
+    </#list>
+</select>
+<button name="addGroupButton">Add group</button>
 
 <table id="groupsTable" class="table table-hover" path="/liveEditGroup">
     <thead>
@@ -165,22 +164,22 @@
             }
         });
     });
-//    $("button[name = 'addGroupButton']").click(function () {
-//        let group = $("select[name = 'otherGroups']").val();
-//        let params = {
-//            groupId: group,
-//            clientId: clientId
-//        };
-//        $.ajax({
-//            url:"/addGroupToClient",
-//            method:"post",
-//            contentType:"application/json",
-//            data:JSON.stringify(params),
-//            success:function () {
-//                location.reload(true);
-//            }
-//        });
-//    });
+    $("button[name = 'addGroupButton']").click(function () {
+        let group = $("select[name = 'otherGroups']").val();
+        let params = {
+            groupId: group,
+            clientId: clientId
+        };
+        $.ajax({
+            url:"/addGroupToClient",
+            method:"post",
+            contentType:"application/json",
+            data:JSON.stringify(params),
+            success:function () {
+                location.reload(true);
+            }
+        });
+    });
 </script>
 <script src="/script/edits/liveEdit.js"></script>
 </html>

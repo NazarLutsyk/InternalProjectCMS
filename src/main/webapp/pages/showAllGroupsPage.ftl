@@ -32,7 +32,6 @@
         <td field = "room">
             <#if group.room??> ${group.room}<#else>room undefined</#if>
         </td>
-        <#--todo change date format-->
         <td field = "startDate" type="date">${group.startDate?string("yyyy/MM/dd HH:mm")}</td>
         <td edit="false">
             <ol>

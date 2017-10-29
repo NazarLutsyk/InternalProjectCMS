@@ -6,9 +6,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ua.com.owu.dto.ClientDTO;
 import ua.com.owu.entity.*;
+import ua.com.owu.entity.seo.FakeAccount;
+import ua.com.owu.entity.seo.FakeUser;
 import ua.com.owu.service.*;
 import ua.com.owu.service.util.ClientDTOAdapter;
 
@@ -31,6 +34,10 @@ public class MyRestController {
     private ClientDTOAdapter clientDTOAdapter;
     @Autowired
     private SocialService socialService;
+    @Autowired
+    private FakeUserService fakeUserService;
+    @Autowired
+    private FakeAccountService fakeAccountService;
 
     @PostMapping("/liveEditCourse")
     public void liveEditCourse(@RequestBody Course course) {
@@ -63,6 +70,30 @@ public class MyRestController {
                 "tagsAboutApplication","client","course","payments","checked","source","discount",
                 "priceWithDiscount","appCloseDate","paid","leftToPay");
         applicationService.save(oldApp);
+    }
+
+    @PostMapping(value = "/liveEditFakeUser")
+    public void liveEditFakeUser(@RequestBody FakeUser fakeUser) {
+        System.out.println(fakeUser);
+        FakeUser oldFakeUser = fakeUserService.findById(fakeUser.getId().toString());
+        BeanUtils.copyProperties(fakeUser, oldFakeUser, "images", "fakeUserComments", "fakeAccounts");
+        fakeUserService.save(oldFakeUser);
+    }
+
+    @PostMapping(value = "/liveEditFakeAccount")
+    public void liveEditFakeAccount(@RequestBody FakeAccount fakeAccount) {
+        System.out.println(fakeAccount);
+        FakeAccount oldFakeAccount = fakeAccountService.findById(fakeAccount.getId().toString());
+        BeanUtils.copyProperties(fakeAccount, oldFakeAccount, "fakeUser", "fakeAccountComments");
+        fakeAccountService.save(oldFakeAccount);
+    }
+
+    @PostMapping("/liveEditSocial")
+    public void liveEditSocial(@RequestBody Social social){
+        System.out.println(social);
+        Social oldSocial = socialService.find(social.getId().toString());
+        BeanUtils.copyProperties(social,oldSocial,"applications");
+        socialService.save(social);
     }
 
     @PostMapping(value = "/findClientsWitchNotFromGroup")

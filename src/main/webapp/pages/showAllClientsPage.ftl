@@ -24,7 +24,7 @@
 <#--todo maybe will add search by checked app and groups?-->
 <form action="/showAllClients" method="get">
     <input type="hidden" value="true" name="withoutGroups">
-    <input type="submit" value="Find without groups">
+    <label>Find without groups or not checked apps<input type="submit" value="Find"></label>
 </form>
 
 <table id="clientsTable" class="table table-hover" path="/liveEditClient">

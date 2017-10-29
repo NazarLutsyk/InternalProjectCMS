@@ -1,5 +1,6 @@
 package ua.com.owu.entity.seo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -29,5 +30,6 @@ public class FakeUser {
     private List<String> images = new ArrayList<>();
     private List<String> fakeUserComments = new ArrayList<>();
     @Reference
+    @JsonIgnore
     private List<FakeAccount> fakeAccounts = new ArrayList<>();
 }

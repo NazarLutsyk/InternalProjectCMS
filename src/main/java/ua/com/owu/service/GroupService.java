@@ -17,4 +17,7 @@ public interface GroupService {
     List<Group> filterByCourseAndPeriod(String course, LocalDate startDate, LocalDate endDate);
 
     Group findOneByGroupName(String name);
+
+    List<Group> findAllGroupsPossibleAddUser(String userId);
+
 }

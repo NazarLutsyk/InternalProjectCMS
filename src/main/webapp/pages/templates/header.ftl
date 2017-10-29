@@ -46,6 +46,7 @@
     <li><a href="/showAllGroups">Группы</a></li>
     <li><a href="/analitics">Аналитика</a></li>
     <li><a href="/showFakeUsers">Фейковые юзери</a></li>
+    <li><a href="/socials">Ресурсы</a></li>
     <form action="/logout" method="post" style="float: right">
         <input type="submit" value="Logout">
     </form>

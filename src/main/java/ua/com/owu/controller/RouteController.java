@@ -120,8 +120,7 @@ public class RouteController {
     public String showClientPage(@PathVariable String idClient, Model model) {
         Client client = clientService.findOne(idClient);
         List<Application> applications = applicationService.findAllByClient(client);
-        List<Group> otherGroups = groupService.findAll();
-        otherGroups.removeAll(client.getGroups());
+        List<Group> otherGroups = groupService.findAllGroupsPossibleAddUser(idClient);
         model.addAttribute("client", client);
         model.addAttribute("applications", applications);
         model.addAttribute("otherGroups", otherGroups);
@@ -144,6 +143,12 @@ public class RouteController {
     public String getFakeUserPage(@PathVariable String id,Model model) {
         model.addAttribute("fakeUser",fakeUserService.findById(id));
         return "showFakeUserPage";
+    }
+
+    @GetMapping("/socials")
+    public String socials(Model model){
+        model.addAttribute("socials",socialService.findAll());
+        return "showAllSocials";
     }
 
 }

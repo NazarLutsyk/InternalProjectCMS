@@ -1,5 +1,6 @@
 package ua.com.owu.entity.seo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
@@ -28,7 +29,8 @@ public class FakeAccount {
     private Date registrationDate;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date lastVisitDate;
-    @Reference
-    private FakeUser fakeUser;
     private List<String> fakeAccountComments = new ArrayList<>();
+    @Reference
+    @JsonIgnore
+    private FakeUser fakeUser;
 }

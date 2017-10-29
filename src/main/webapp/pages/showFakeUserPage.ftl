@@ -1,38 +1,5 @@
 <#include "templates/header.ftl"/>
 
-<table class="table table-hover">
-    <thead class="bg-primary">
-    <tr>
-        <td>Имя</td>
-        <td>Фамилия</td>
-        <td>Телефон</td>
-        <td>Мейл</td>
-        <td>Комментарии</td>
-        <td>Изображения</td>
-    </tr>
-    </thead>
-    <tr>
-        <td>${fakeUser.name}</td>
-        <td>${fakeUser.surname}</td>
-        <td>${fakeUser.phone}</td>
-        <td>${fakeUser.email}</td>
-        <td>
-            <ul>
-            <#list fakeUser.fakeUserComments as comment>
-                <li>${comment}</li>
-            </#list>
-            </ul>
-        </td>
-        <td>
-            <ul>
-            <#list fakeUser.images as image>
-                <li style="float: left"><img src="../${image}" height="30px" width="30px"></li>
-            </#list>
-            </ul>
-        </td>
-    </tr>
-</table>
-
 <form action="/createFakeAccount" method="post">
     <label for="">Логин<input type="text" name="login" placeholder="login" required></label>
     <label for="">Пароль<input type="text" name="password" placeholder="password" required></label>
@@ -46,7 +13,40 @@
     <input type="submit" name="" placeholder="">
 </form>
 
-<table class="table table-hover">
+<table class="table table-hover" path="/liveEditFakeUser">
+    <thead class="bg-primary">
+    <tr>
+        <td>Имя</td>
+        <td>Фамилия</td>
+        <td>Телефон</td>
+        <td>Мейл</td>
+        <td>Комментарии</td>
+        <td>Изображения</td>
+    </tr>
+    </thead>
+    <tr entityID="${fakeUser.id}">
+        <td field="name"><a href="/fakeUser/${fakeUser.id}">${fakeUser.name}</a></td>
+        <td field="surname">${fakeUser.surname}</td>
+        <td field="phone">${fakeUser.phone}</td>
+        <td field="email">${fakeUser.email}</td>
+        <td edit="false">
+            <ul>
+            <#list fakeUser.fakeUserComments as comment>
+                <li>${comment}</li>
+            </#list>
+            </ul>
+        </td>
+        <td edit="false">
+            <ul>
+            <#list fakeUser.images as image>
+                <li style="float: left"><img src="../${image}" height="30px" width="30px"></li>
+            </#list>
+            </ul>
+        </td>
+    </tr>
+</table>
+
+<table class="table table-hover" path="/liveEditFakeAccount">
     <thead class="bg-primary">
     <tr>
         <td>Логин</td>
@@ -58,35 +58,36 @@
         <td>Удалить</td>
     </tr>
     </thead>
-<#list fakeUser.fakeAccounts as fakeAccount>
-    <tr>
-        <td>${fakeAccount.login}</td>
-        <td>${fakeAccount.password}</td>
-        <td>${fakeAccount.siteUri?string}</td>
-        <td>${fakeAccount.registrationDate?string('dd-MM-yyyy')}</td>
-        <td>${fakeAccount.lastVisitDate?string('dd-MM-yyyy')}</td>
-        <td>
-            <ul>
-                <#list fakeAccount.fakeAccountComments as comment>
-                    <li>${comment}</li>
-                </#list>
-            </ul>
-        </td>
-        <td>
-            <form action="/deleteAccount" method="post"
-                  style="display: inline-block">
-                <input type="hidden" name="accountId"
-                       value="${fakeAccount.id}"/>
-                <input type="submit" value="Delete"/>
-            </form>
-        </td>
-    </tr>
-</#list>
+    <#list fakeUser.fakeAccounts as fakeAccount>
+        <tr entityID="${fakeAccount.id}">
+            <td field="login">${fakeAccount.login}</td>
+            <td field="password">${fakeAccount.password}</td>
+            <td field="siteUri">${fakeAccount.siteUri?string}</td>
+            <td field="registrationDate" type="date">${fakeAccount.registrationDate?string('yyyy-MM-dd')}</td>
+            <td field="lastVisitDate" type="date">${fakeAccount.lastVisitDate?string('yyyy-MM-dd')}</td>
+            <td edit="false">
+                <ul>
+                    <#list fakeAccount.fakeAccountComments as comment>
+                        <li>${comment}</li>
+                    </#list>
+                </ul>
+            </td>
+            <td edit="false">
+                <form action="/deleteAccount" method="post"
+                      style="display: inline-block">
+                    <input type="hidden" name="accountId"
+                           value="${fakeAccount.id}"/>
+                    <input type="submit" value="Delete"/>
+                </form>
+            </td>
+        </tr>
+    </#list>
 </table>
 
 <script src="/script/spyScript.js"></script>
 <script src="/script/recomendationAjaxSearch.js"></script>
 <script src="/script/select2.js"></script>
+<script src="/script/edits/liveEdit.js"></script>
 
 </body>
 </html>

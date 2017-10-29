@@ -2,6 +2,10 @@ package ua.com.owu.configs;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
+import org.bson.codecs.BsonTypeClassMap;
+import org.bson.codecs.DocumentCodec;
+import org.bson.codecs.configuration.CodecRegistries;
+import org.bson.codecs.configuration.CodecRegistry;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.springframework.context.annotation.Bean;
@@ -36,8 +40,6 @@ public class DataConfig {
     protected String getDatabaseName() {
         return "cms";
     }
-
-
 
     @Bean
     public MongoClient mongoClient() {

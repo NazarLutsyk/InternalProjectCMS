@@ -3,6 +3,7 @@ package ua.com.owu.controller;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -161,7 +162,6 @@ public class CreateController {
         clientService.save(clientObj);
         return "redirect:/adminPage";
     }
-
 
     @PostMapping("/createGroup")
     public String createGroup(@RequestParam String course,
@@ -404,8 +404,20 @@ public class CreateController {
         Social social = new Social();
         social.setName(name);
         socialService.save(social);
-        return "redirect:/adminPage";
+        return "redirect:/socials";
     }
+
+//    @GetMapping("/deleteSource/{sourceId}")
+//    public String deleteSource(@PathVariable String sourceId){
+//        Social social = socialService.find(sourceId);
+//        List<Application> applications = social.getApplications();
+//        for (Application application : applications) {
+//            application.setSource(null);
+//        }
+//        socialService.delete(social);
+//        applicationService.save(applications);
+//        return "redirect:/socials";
+//    }
 
     @PostMapping("/createPayment")
     public String createPayment(@RequestParam Double amount,

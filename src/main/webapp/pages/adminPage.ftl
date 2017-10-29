@@ -116,7 +116,7 @@
     <input type="submit">
 </form>
 <br>
-<h3>Super puper magic search</h3>
+<h3>Magic search</h3>
 <select name="client" id="" class="js-example-basic-single" placeholder="Find">
     <option value="">empty</option>
 <#list clients as client>

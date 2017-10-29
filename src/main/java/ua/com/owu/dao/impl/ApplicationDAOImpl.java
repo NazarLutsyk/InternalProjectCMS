@@ -4,19 +4,20 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.joda.time.LocalDate;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.aggregation.Projection;
 import org.mongodb.morphia.query.CriteriaContainer;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.DateOperators;
 import org.springframework.stereotype.Repository;
 import ua.com.owu.dao.ApplicationDAO;
 import ua.com.owu.entity.Application;
 import ua.com.owu.entity.Client;
 import ua.com.owu.entity.Social;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.mongodb.morphia.aggregation.Accumulator.accumulator;
 import static org.mongodb.morphia.aggregation.Group.grouping;
@@ -81,16 +82,20 @@ public class ApplicationDAOImpl implements ApplicationDAO {
 
     @Override
     public List<String> getSocialStatisticByPeriod(LocalDate startDate, LocalDate endDate, Collection<Social> socials) {
-        Query<Application> query = datastore.createQuery(Application.class);
-        CriteriaContainer and = query.and(
-                query.criteria("appReciveDate").greaterThanOrEq(startDate.toDate()),
-                query.criteria("appReciveDate").lessThanOrEq(endDate.toDate()),
-                query.criteria("source").hasAnyOf(socials)
+        Query<Application> queryApp = datastore.createQuery(Application.class);
+        CriteriaContainer and = queryApp.and(
+                queryApp.criteria("appReciveDate").greaterThanOrEq(startDate.toDate()),
+                queryApp.criteria("appReciveDate").lessThanOrEq(endDate.toDate()),
+                queryApp.criteria("source").hasAnyOf(socials)
         );
-        Iterator<Document> aggregate = datastore.
-                createAggregation(Application.class)
-                .match(query)
-                .group("source", grouping("count", accumulator("$sum", 1)))
+        Query<Social> socialApp = datastore
+                .createQuery(Social.class)
+                .field("applications")
+                .hasAnyOf(queryApp.asList());
+        Iterator<Document> aggregate = datastore
+                .createAggregation(Social.class)
+                .match(socialApp)
+                .group("name", grouping("count", accumulator("$sum", 1)))
                 .aggregate(Document.class);
         List<String> documents = new ArrayList<>();
         aggregate.forEachRemaining(document -> documents.add(document.toJson()));
