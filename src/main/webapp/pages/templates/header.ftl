@@ -26,9 +26,13 @@
     <link href="/externalLibsJs/select2CSS/select2.min.css" rel="stylesheet"/>
     <script src="/externalLibsJs/select2JS/select2.min.js"></script>
     <link rel="stylesheet" href="/style/main.css">
+
+    <#--datatable-->
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 </head>
 <body>
-
+<#setting time_zone="Europe/Kyiv">
 <#--<nav class="breadcrumb">-->
 <#--<a class="breadcrumb-item" href="/">Home</a>-->
 <#--<a class="breadcrumb-item" href="/adminPage">админка</a>-->

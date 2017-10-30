@@ -6,7 +6,7 @@
     <input type="submit" name="" placeholder="">
 </form>
 
-<table class="table table-hover" path="">
+<table class="table table-hover" data-table='true' path="">
     <thead>
     <tr class="bg-primary">
         <th>Сумма</th>
@@ -36,3 +36,5 @@
         }
     });
 </script>
+
+<script src="/script/includeDataTable.js"></script>

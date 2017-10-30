@@ -13,17 +13,17 @@
 </form>
 
 
-<table id="clientsTable" class="table table-hover" path="/liveEditClient">
+<table id="clientsTable" class="table table-hover" data-table='true' path="/liveEditClient">
     <thead>
     <tr class="bg-primary">
-        <td>имя</td>
-        <td>фамилия</td>
-        <td>телефон</td>
-        <td>мыло</td>
-        <td>город</td>
-        <td>ком клиента</td>
-        <td>теги</td>
-        <td>Exit</td>
+        <th>имя</th>
+        <th>фамилия</th>
+        <th>телефон</th>
+        <th>мыло</th>
+        <th>город</th>
+        <th>ком клиента</th>
+        <th>теги</th>
+        <th>Exit</th>
     </tr>
     </thead>
 <#list clients as client>
@@ -33,13 +33,13 @@
     <td field="phoneNumber" class="phoneNumber">${client.phoneNumber}</td>
     <td field="email" class="email">${client.email}</td>
     <td field="city" class="city">${client.city}</td>
-    <td class="commentAboutClient" edit="false">
+    <td field="commentsAboutClient" type="array">
         <#list client.commentsAboutClient as comm>
-        ${comm.text}<br>
+            ${comm}<#sep >;<br>
         </#list>
     </td>
-    <td class="tagsAboutClient" edit="false">
-        <#list client.tagsAboutClient as tag> ${tag}<#sep >,</#list>
+    <td field="tagsAboutClient" type="array">
+        <#list client.tagsAboutClient as tag> ${tag}<#sep >;</#list>
     </td>
     <td edit="false">
         <form action="/deleteFromGroup" method="post">
@@ -55,5 +55,6 @@
 <script src="/script/recomendationAjaxSearch.js"></script>
 <script src="/script/select2.js"></script>
 <script src="/script/edits/liveEdit.js"></script>
+<script src="/script/includeDataTable.js"></script>
 </body>
 </html>

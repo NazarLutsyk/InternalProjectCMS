@@ -8,16 +8,16 @@
     <label for="">Изображение<input type="file" name="image" placeholder="image" required></label>
     <input type="submit" name="" placeholder="">
 </form>
-<table class="table table-hover" path="/liveEditFakeUser">
+<table class="table table-hover" data-table='true' path="/liveEditFakeUser">
     <thead class="bg-primary">
     <tr>
-        <td>Имя</td>
-        <td>Фамилия</td>
-        <td>Телефон</td>
-        <td>Мейл</td>
-        <td>Комментарии</td>
-        <td>Изображения</td>
-        <td>Аккаунты</td>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Телефон</th>
+        <th>Мейл</th>
+        <th>Комментарии</th>
+        <th>Изображения</th>
+        <th>Аккаунты</th>
     </tr>
     </thead>
 <#list fakeUsers as user>
@@ -26,12 +26,10 @@
         <td field="surname">${user.surname}</td>
         <td field="phone">${user.phone}</td>
         <td field="email">${user.email}</td>
-        <td edit="false">
-            <ul>
-                <#list user.fakeUserComments as comment>
-                    <li>${comment}</li>
-                </#list>
-            </ul>
+        <td field="fakeUserComments" type="array">
+            <#list user.fakeUserComments as comment>
+                ${comment}<#sep >;
+            </#list>
         </td>
         <td edit="false">
             <ul>
@@ -50,7 +48,7 @@
     </tr>
 </#list>
 </table>
-
+<script src="/script/includeDataTable.js"></script>
 <script src="/script/spyScript.js"></script>
 <script src="/script/recomendationAjaxSearch.js"></script>
 <script src="/script/select2.js"></script>

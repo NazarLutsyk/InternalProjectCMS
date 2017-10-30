@@ -7,7 +7,7 @@
 
     <input type="submit" name="">
 </form>
-<table class="table table-hover" path="/liveEditCourse">
+<table class="table table-hover" data-table='true' path="/liveEditCourse">
     <thead>
     <tr class="bg-primary">
         <th>название</th>
@@ -24,5 +24,5 @@
 
 </body>
 </html>
-
+<script src="/script/includeDataTable.js"></script>
 <script src="/script/edits/liveEdit.js"></script>

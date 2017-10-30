@@ -1,8 +1,9 @@
 package ua.com.owu.dao.impl;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.query.CountOptions;
+import org.mongodb.morphia.aggregation.Projection;
 import org.mongodb.morphia.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,6 @@ import ua.com.owu.entity.Client;
 import ua.com.owu.entity.Group;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class ClientDAOImpl implements ClientDAO {
@@ -77,10 +77,12 @@ public class ClientDAOImpl implements ClientDAO {
 
     @Override
     public List<Client> findClientsWithoutGroups() {
-        //todo create query client.app.size == client.groups.size
-//        Query<Client> query = datastore.createQuery(Client.class);
-//        System.out.println("Found list client witch not from group:" + clients);
-        return new ArrayList<>();
+        List<Client> clients = datastore.createQuery(Client.class)
+                .where("(this.applications.length == undefined  || this.groups == undefined) ||" +
+                        "(this.applications.length != this.groups.length)")
+                .asList();
+        System.out.println("Found not checked clients:"+clients);
+        return clients;
     }
 
 //    @Override

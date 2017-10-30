@@ -103,5 +103,14 @@ public class ApplicationDAOImpl implements ApplicationDAO {
         return documents;
     }
 
+    @Override
+    public List<Application> findNotPaidApps() {
+        List<Application> applications = datastore.createQuery(Application.class)
+                .field("leftToPay").greaterThan(0)
+                .asList();
+        System.out.println("Found not paid apps:"+ applications);
+        return applications;
+    }
+
 
 }

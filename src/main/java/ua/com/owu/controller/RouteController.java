@@ -12,6 +12,7 @@ import ua.com.owu.entity.Client;
 import ua.com.owu.entity.Group;
 import ua.com.owu.service.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -50,11 +51,17 @@ public class RouteController {
     }
 
     @GetMapping("/showAllApplications")
-    public String showAllApplications(Model model) {
+    public String showAllApplications(@RequestParam(required = false, defaultValue = "false") boolean notPaid,
+                                      Model model) {
+        List<Application> applications = new ArrayList<>();
+        if (notPaid == true)
+            applications = applicationService.findNotPaidApps();
+        else
+            applications = applicationService.findAll();
         model.addAttribute("clients", clientService.findAll());
         model.addAttribute("courses", courseService.findAll());
         model.addAttribute("groups", groupService.findAll());
-        model.addAttribute("applications", applicationService.findAll());
+        model.addAttribute("applications", applications);
         model.addAttribute("sources", socialService.findAll());
         return "showAllApplicationsPage";
     }

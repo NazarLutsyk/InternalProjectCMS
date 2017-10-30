@@ -40,26 +40,30 @@
         <input type="number" min="0" name="discount" placeholder="discount">
     </label>
     <input type="hidden" name="appCloseDate" id="closeDate">
-    <input type="submit" name="" placeholder="">
+    <label>Find unpaid applications<input type="submit" name="" placeholder=""></label>
 </form>
-<table id="applicationsTable" class="table table-hover" path="/liveEditApplication">
+<form action="/showAllApplications" method="get">
+    <input type="hidden" name="notPaid" value="true">
+    <input type="submit">
+</form>
+<table id="applicationsTable" class="table table-hover" data-table='true' path="/liveEditApplication">
     <thead class="bg-primary">
     <tr>
-        <td>client</td>
-        <td>платежи</td>
-        <td>course</td>
-        <td>дата</td>
-        <td>источник</td>
-        <td>ком клиента</td>
-        <td>ком мен</td>
-        <td>теги</td>
-        <td>будующий курс</td>
-        <td>дата создания</td>
-        <td>цена со скидкой</td>
-        <td>скидка %</td>
-        <td>оплачено</td>
-        <td>осталось заплатить</td>
-        <td>isChecked</td>
+        <th>client</th>
+        <th>платежи</th>
+        <th>course</th>
+        <th>дата</th>
+        <th>источник</th>
+        <th>ком клиента</th>
+        <th>ком мен</th>
+        <th>теги</th>
+        <th>будующий курс</th>
+        <th>дата создания</th>
+        <th>цена со скидкой</th>
+        <th>скидка %</th>
+        <th>оплачено</th>
+        <th>осталось заплатить</th>
+        <th>isChecked</th>
     </tr>
     </thead>
 <#list applications as app>
@@ -71,9 +75,9 @@
         <td edit="false">${app.source.name}</td>
         <td field="commnetFromClient">${app.commnetFromClient}</td>
         <td field="commentFromManager">${app.commentFromManager}</td>
-        <td edit="false">
+        <td field="tagsAboutApplication" type="array">
             <#list app.tagsAboutApplication as tag>
-                <p>${tag}</p>
+                ${tag}<#sep >;
             </#list>
         </td>
         <td field="futureCourse">${app.futureCourse}</td>
@@ -99,6 +103,6 @@
 <script src="/script/recomendationAjaxSearch.js"></script>
 <script src="/script/select2.js"></script>
 <script src="/script/edits/liveEdit.js"></script>
-
+<script src="/script/includeDataTable.js"></script>
 </body>
 </html>

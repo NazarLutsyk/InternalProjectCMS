@@ -20,6 +20,11 @@ $('td').blur(function () {
                     entity[$(this).attr('field')] = new Date($(this).text());
                     break;
                 }
+                case "array":{
+                    let regex = /\s/;
+                    entity[$(this).attr('field')] = $(this).text().replace(regex," ").split(";");
+                    break;
+                }
                 default: {
                     entity[$(this).attr('field')] = $(this).text();
                     break;

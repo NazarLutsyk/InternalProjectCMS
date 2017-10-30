@@ -50,7 +50,7 @@ public class MyRestController {
         System.out.println(client);
         Client oldClient = clientService.findOne(client.getId().toString());
         BeanUtils.copyProperties(client,oldClient,
-                "commentsAboutClient", "tagsAboutClient", "recomendation", "groups", "applications");
+                "recomendation", "groups", "applications");
         clientService.save(oldClient);
     }
 
@@ -67,7 +67,7 @@ public class MyRestController {
         System.out.println(app);
         Application oldApp = applicationService.findOne(app.getId().toString());
         BeanUtils.copyProperties(app, oldApp,
-                "tagsAboutApplication","client","course","payments","checked","source","discount",
+                "client","course","payments","checked","source","discount",
                 "priceWithDiscount","appCloseDate","paid","leftToPay");
         applicationService.save(oldApp);
     }
@@ -76,7 +76,7 @@ public class MyRestController {
     public void liveEditFakeUser(@RequestBody FakeUser fakeUser) {
         System.out.println(fakeUser);
         FakeUser oldFakeUser = fakeUserService.findById(fakeUser.getId().toString());
-        BeanUtils.copyProperties(fakeUser, oldFakeUser, "images", "fakeUserComments", "fakeAccounts");
+        BeanUtils.copyProperties(fakeUser, oldFakeUser, "images", "fakeAccounts");
         fakeUserService.save(oldFakeUser);
     }
 
@@ -84,7 +84,7 @@ public class MyRestController {
     public void liveEditFakeAccount(@RequestBody FakeAccount fakeAccount) {
         System.out.println(fakeAccount);
         FakeAccount oldFakeAccount = fakeAccountService.findById(fakeAccount.getId().toString());
-        BeanUtils.copyProperties(fakeAccount, oldFakeAccount, "fakeUser", "fakeAccountComments");
+        BeanUtils.copyProperties(fakeAccount, oldFakeAccount, "fakeUser");
         fakeAccountService.save(oldFakeAccount);
     }
 

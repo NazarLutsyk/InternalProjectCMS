@@ -57,4 +57,9 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationDAO.getSocialStatisticByPeriod(startDate,endDate,socials);
     }
 
+    @Override
+    public List<Application> findNotPaidApps() {
+        return applicationDAO.findNotPaidApps();
+    }
+
 }

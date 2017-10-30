@@ -13,15 +13,15 @@
     <input type="submit" name="" placeholder="">
 </form>
 
-<table class="table table-hover" path="/liveEditFakeUser">
+<table class="table table-hover" data-table='true' path="/liveEditFakeUser">
     <thead class="bg-primary">
     <tr>
-        <td>Имя</td>
-        <td>Фамилия</td>
-        <td>Телефон</td>
-        <td>Мейл</td>
-        <td>Комментарии</td>
-        <td>Изображения</td>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Телефон</th>
+        <th>Мейл</th>
+        <th>Комментарии</th>
+        <th>Изображения</th>
     </tr>
     </thead>
     <tr entityID="${fakeUser.id}">
@@ -29,12 +29,10 @@
         <td field="surname">${fakeUser.surname}</td>
         <td field="phone">${fakeUser.phone}</td>
         <td field="email">${fakeUser.email}</td>
-        <td edit="false">
-            <ul>
+        <td field="fakeUserComments" type="array">
             <#list fakeUser.fakeUserComments as comment>
-                <li>${comment}</li>
-            </#list>
-            </ul>
+                 ${comment}<#sep >;
+             </#list>
         </td>
         <td edit="false">
             <ul>
@@ -49,45 +47,43 @@
 <table class="table table-hover" path="/liveEditFakeAccount">
     <thead class="bg-primary">
     <tr>
-        <td>Логин</td>
-        <td>Пароль</td>
-        <td>урл</td>
-        <td>Дата регистрации</td>
-        <td>Дата последнего визита</td>
-        <td>Комменты</td>
-        <td>Удалить</td>
+        <th>Логин</th>
+        <th>Пароль</th>
+        <th>урл</th>
+        <th>Дата регистрации</th>
+        <th>Дата последнего визита</th>
+        <th>Комменты</th>
+        <th>Удалить</th>
     </tr>
     </thead>
-    <#list fakeUser.fakeAccounts as fakeAccount>
-        <tr entityID="${fakeAccount.id}">
-            <td field="login">${fakeAccount.login}</td>
-            <td field="password">${fakeAccount.password}</td>
-            <td field="siteUri">${fakeAccount.siteUri?string}</td>
-            <td field="registrationDate" type="date">${fakeAccount.registrationDate?string('yyyy-MM-dd')}</td>
-            <td field="lastVisitDate" type="date">${fakeAccount.lastVisitDate?string('yyyy-MM-dd')}</td>
-            <td edit="false">
-                <ul>
-                    <#list fakeAccount.fakeAccountComments as comment>
-                        <li>${comment}</li>
-                    </#list>
-                </ul>
-            </td>
-            <td edit="false">
-                <form action="/deleteAccount" method="post"
-                      style="display: inline-block">
-                    <input type="hidden" name="accountId"
-                           value="${fakeAccount.id}"/>
-                    <input type="submit" value="Delete"/>
-                </form>
-            </td>
-        </tr>
-    </#list>
+<#list fakeUser.fakeAccounts as fakeAccount>
+    <tr entityID="${fakeAccount.id}">
+        <td field="login">${fakeAccount.login}</td>
+        <td field="password">${fakeAccount.password}</td>
+        <td field="siteUri">${fakeAccount.siteUri?string}</td>
+        <td field="registrationDate" type="date">${fakeAccount.registrationDate?string('yyyy-MM-dd')}</td>
+        <td field="lastVisitDate" type="date">${fakeAccount.lastVisitDate?string('yyyy-MM-dd')}</td>
+        <td field="fakeAccountComments" type="array">
+            <#list fakeAccount.fakeAccountComments as comment>
+                ${comment}<#sep >;
+            </#list>
+        </td>
+        <td edit="false">
+            <form action="/deleteAccount" method="post"
+                  style="display: inline-block">
+                <input type="hidden" name="accountId"
+                       value="${fakeAccount.id}"/>
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+    </tr>
+</#list>
 </table>
 
 <script src="/script/spyScript.js"></script>
 <script src="/script/recomendationAjaxSearch.js"></script>
 <script src="/script/select2.js"></script>
 <script src="/script/edits/liveEdit.js"></script>
-
+<script src="/script/includeDataTable.js"></script>
 </body>
 </html>

@@ -1,73 +1,64 @@
 <#include "templates/header.ftl">
-<label for="">Enter comment about client:</label>
-<form action="/addCommentAboutClient-${client.id}" method="post">
-    <input type="text" name="text" placeholder="comment">
-    <input type="submit">
-</form>
 
 <table id="clientsTable" class="table table-hover" path="/liveEditClient">
     <thead>
     <tr class="bg-primary">
-        <td>имя</td>
-        <td>фамилия</td>
-        <td>телефон</td>
-        <td>мыло</td>
-        <td>город</td>
-        <td>ком клиента</td>
-        <td>теги</td>
+        <th>имя</th>
+        <th>фамилия</th>
+        <th>телефон</th>
+        <th>мыло</th>
+        <th>город</th>
+        <th>ком клиента</th>
+        <th>теги</th>
     </tr>
     </thead>
     <tr entityID="${client.id}">
-        <td field="name" class="name"><a href="/client/${client.id}">${client.name}</a></td>
+        <td field="name" class="name">${client.name}</td>
         <td field="surname" class="surname">${client.surname}</td>
         <td field="phoneNumber" class="phoneNumber">${client.phoneNumber}</td>
         <td field="email" class="email">${client.email}</td>
         <td field="city" class="city">${client.city}</td>
-        <td class="commentAboutClient" edit="false">
-            <ul>
-                <#list client.commentsAboutClient as comm>
-                    <li>
-                    ${comm.text}
-                    </li>
-                </#list>
-            </ul>
+        <td field="commentsAboutClient" type="array">
+        <#list client.commentsAboutClient as comm>
+        ${comm}<#sep >;<br>
+        </#list>
         </td>
-        <td class="tagsAboutClient" edit="false">
-            <#list client.tagsAboutClient as tag> ${tag}<#sep >,</#list>
+        <td field="tagsAboutClient" type="array">
+        <#list client.tagsAboutClient as tag> ${tag}<#sep >;</#list>
         </td>
     </tr>
 </table>
 
-<table id="applicationsTable" class="table table-hover" path="/liveEditApplication">
+<table id="applicationsTable" class="table table-hover" data-table='true' path="/liveEditApplication">
     <thead class="bg-primary">
     <tr>
-        <td>платежи</td>
-        <td>course</td>
-        <td>дата</td>
-        <td>источник</td>
-        <td>ком клиента</td>
-        <td>ком мен</td>
-        <td>теги</td>
-        <td>будующий курс</td>
-        <td>дата создания</td>
-        <td>цена со скидкой</td>
-        <td>скидка %</td>
-        <td>оплачено</td>
-        <td>осталось заплатить</td>
-        <td>isChecked</td>
+        <th>платежи</th>
+        <th>course</th>
+        <th>дата</th>
+        <th>источник</th>
+        <th>ком клиента</th>
+        <th>ком мен</th>
+        <th>теги</th>
+        <th>будующий курс</th>
+        <th>дата создания</th>
+        <th>цена со скидкой</th>
+        <th>скидка %</th>
+        <th>оплачено</th>
+        <th>осталось заплатить</th>
+        <th>isChecked</th>
     </tr>
     </thead>
 <#list client.applications as app>
     <tr entityID="${app.id}">
-        <td edit="false"><a \href="/payments/${app.id}">Смотреть</a></td>
+        <td edit="false"><a href="/payments/${app.id}">Смотреть</a></td>
         <td edit="false">${app.course.courseTitle}</td>
         <td field="appReciveDate" type="date">${app.appReciveDate?string("yyyy/MM/dd HH:mm")}</td>
         <td edit="false">${app.source.name}</td>
         <td field="commnetFromClient">${app.commnetFromClient}</td>
         <td field="commentFromManager">${app.commentFromManager}</td>
-        <td edit="false">
+        <td field="tagsAboutApplication" type="array">
             <#list app.tagsAboutApplication as tag>
-                <p>${tag}</p>
+            ${tag}<#sep >;
             </#list>
         </td>
         <td field="futureCourse">${app.futureCourse}</td>
@@ -86,22 +77,24 @@
     </tr>
 </#list>
 </table>
-<select name="otherGroups">
+<div>
+    <select name="otherGroups">
     <#list otherGroups as group>
         <option value="${group.id}">${group.groupIdentifier}</option>
     </#list>
-</select>
+    </select>
+</div>
 <button name="addGroupButton">Add group</button>
 
-<table id="groupsTable" class="table table-hover" path="/liveEditGroup">
+<table id="groupsTable" class="table table-hover" data-table='true' path="/liveEditGroup">
     <thead>
     <tr class="bg-primary">
-        <td>Группа</td>
-        <td>Курс</td>
-        <td>комната</td>
-        <td>Дата старта</td>
-        <td>Клиенты</td>
-        <td>Изгнать</td>
+        <th>Группа</th>
+        <th>Курс</th>
+        <th>комната</th>
+        <th>Дата старта</th>
+        <th>Клиенты</th>
+        <th>Изгнать</th>
     </tr>
     </thead>
 <#list client.groups as group>
@@ -115,10 +108,10 @@
             </select>
         </td>
         <td edit="false">${group.course}</td>
-        <td field = "room">
+        <td field="room">
             <#if group.room??> ${group.room}<#else>room undefined</#if>
         </td>
-        <td field = "startDate" type="date">${group.startDate?datetime?string("yyyy-MM-dd HH:mm")}</td>
+        <td field="startDate" type="date">${group.startDate?datetime?string("yyyy-MM-dd HH:mm")}</td>
         <td edit="false">
             <ol>
                 <#list group.clients as client>
@@ -171,15 +164,16 @@
             clientId: clientId
         };
         $.ajax({
-            url:"/addGroupToClient",
-            method:"post",
-            contentType:"application/json",
-            data:JSON.stringify(params),
-            success:function () {
+            url: "/addGroupToClient",
+            method: "post",
+            contentType: "application/json",
+            data: JSON.stringify(params),
+            success: function () {
                 location.reload(true);
             }
         });
     });
 </script>
 <script src="/script/edits/liveEdit.js"></script>
+<script src="/script/includeDataTable.js"></script>
 </html>

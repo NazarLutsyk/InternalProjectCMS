@@ -15,14 +15,14 @@
     <input type="date" name="endDate">
     <input type="submit">
 </form>
-<table id="groupsTable" class="table table-hover" path="/liveEditGroup">
+<table id="groupsTable" class="table table-hover" data-table='true' path="/liveEditGroup">
     <thead>
     <tr class="bg-primary">
-        <td>Группа</td>
-        <td>Курс</td>
-        <td>комната</td>
-        <td>Дата старта</td>
-        <td>Клиенты</td>
+        <th>Группа</th>
+        <th>Курс</th>
+        <th>комната</th>
+        <th>Дата старта</th>
+        <th>Клиенты</th>
     </tr>
     </thead>
 <#list groups as group>
@@ -44,5 +44,6 @@
 </#list>
 </table>
 <script src="/script/edits/liveEdit.js"></script>
+<script src="/script/includeDataTable.js"></script>
 </body>
 </html>

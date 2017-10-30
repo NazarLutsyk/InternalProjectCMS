@@ -3,7 +3,6 @@ package ua.com.owu.controller;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,8 +20,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Controller
 public class CreateController {
@@ -38,9 +39,6 @@ public class CreateController {
 
     @Autowired
     private GroupService groupService;
-
-    @Autowired
-    private CommentService commentService;
 
     @Autowired
     private PaymentService paymentService;
@@ -94,16 +92,10 @@ public class CreateController {
         if (!recommendation.equals("empty")) {
             client.builder().recomendation(clientService.findOne(recommendation));
         }
-        Comment comment = Comment.builder()
-                .id(new ObjectId())
-                .text(commentAboutClient)
-                .client(client)
-                .build();
 
-        client.getCommentsAboutClient().add(comment);
+        client.getCommentsAboutClient().add(commentAboutClient);
 
         clientService.save(client);
-        commentService.save(comment);
 
         return "redirect:/adminPage";
     }
@@ -251,12 +243,8 @@ public class CreateController {
         if (!clientRecomendation.equals("empty")) {
             client.builder().recomendation(clientService.findOne(clientRecomendation));
         }
-        Comment comment = Comment.builder()
-                .id(new ObjectId())
-                .text(clientOurComment)
-                .client(client)
-                .build();
-        client.getCommentsAboutClient().add(comment);
+
+        client.getCommentsAboutClient().add(clientOurComment);
         System.out.println("Client now is - " + client);
 
         Course course = courseService.findOne(courseSelect);
@@ -292,25 +280,9 @@ public class CreateController {
         socialService.save(social);
         groupService.save(group);
         clientService.save(client);
-        commentService.save(comment);
         applicationService.save(application);
 
         return "redirect:/";
-    }
-
-    @PostMapping("/addCommentAboutClient-{clientId}")
-    public String addCommentAboutClient(@RequestParam String text,
-                                        @PathVariable String clientId) {
-        Client client = clientService.findOne(clientId);
-        Comment comment = Comment.builder()
-                .id(new ObjectId())
-                .client(client)
-                .text(text)
-                .build();
-        client.getCommentsAboutClient().add(comment);
-        commentService.save(comment);
-        clientService.save(client);
-        return "redirect:/client/" + clientId;
     }
 
     @PostMapping("/createFakeUser")

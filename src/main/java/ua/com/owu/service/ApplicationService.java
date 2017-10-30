@@ -23,5 +23,7 @@ public interface ApplicationService {
 
     List<String> getSocialStatisticByPeriod(LocalDate startDate, LocalDate endDate, Collection<Social> socials);
 
+    List<Application> findNotPaidApps();
+
 
 }

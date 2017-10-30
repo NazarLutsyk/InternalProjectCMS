@@ -1,17 +1,11 @@
 package ua.com.owu.configs;
 
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
-import org.bson.codecs.BsonTypeClassMap;
-import org.bson.codecs.DocumentCodec;
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
+import com.mongodb.MongoClientURI;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
 
 //@Configuration
 //public class DataConfig extends AbstractMongoConfiguration {
@@ -36,6 +30,7 @@ import javax.annotation.PostConstruct;
 //}
 @Configuration
 public class DataConfig {
+    MongoClientURI mongoClientURI = new MongoClientURI("mongodb://root:root@ds042527.mlab.com:42527/crm");
 
     protected String getDatabaseName() {
         return "cms";
@@ -43,7 +38,8 @@ public class DataConfig {
 
     @Bean
     public MongoClient mongoClient() {
-        return new MongoClient("localhost");
+        MongoClient mongoClient = new MongoClient(mongoClientURI);
+        return mongoClient;
     }
 
     @Bean
@@ -55,7 +51,7 @@ public class DataConfig {
 
     @Bean
     public Datastore datastore (){
-        return morphia().createDatastore(mongoClient(), getDatabaseName());
+        return morphia().createDatastore(mongoClient(), mongoClientURI.getDatabase());
     }
 
 //    @PostConstruct

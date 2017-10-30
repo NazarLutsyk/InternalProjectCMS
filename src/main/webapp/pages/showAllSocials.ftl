@@ -4,10 +4,10 @@
     <input type="text" name="name" placeholder="Name" required>
     <input type="submit">
 </form>
-<table class="table table-hover" path="/liveEditSocial">
+<table class="table table-hover" data-table='true' path="/liveEditSocial">
     <thead>
         <tr class="bg-primary">
-            <td>название</td>
+            <th>название</th>
             <#--<td>delete</td>-->
         </tr>
     </thead>
@@ -23,3 +23,4 @@
 </body>
 </html>
 <script src="/script/edits/liveEdit.js"></script>
+<script src="/script/includeDataTable.js"></script>

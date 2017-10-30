@@ -25,4 +25,6 @@ public interface ApplicationDAO{
 
     List<String> getSocialStatisticByPeriod(LocalDate startDate, LocalDate endDate, Collection<Social> socials);
 
+    List<Application> findNotPaidApps();
+
 }
