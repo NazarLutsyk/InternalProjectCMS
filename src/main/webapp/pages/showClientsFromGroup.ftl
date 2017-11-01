@@ -9,7 +9,7 @@
         </select>
     </label>
     <input type="hidden" name="group" value="${group.id}">
-    <input type="submit" name="" placeholder="">
+    <input type="submit" class="btn btn-info btn-sm" name="" placeholder="">
 </form>
 
 
@@ -30,8 +30,8 @@
     <tr entityID="${client.id}" class="${client.id}">
     <td field="name" class="name"><a href="/client/${client.id}">${client.name}</a></td>
     <td field="surname" class="surname">${client.surname}</td>
-    <td field="phoneNumber" class="phoneNumber">${client.phoneNumber}</td>
-    <td field="email" class="email">${client.email}</td>
+    <td field="phoneNumber" type="phone" class="phoneNumber">${client.phoneNumber}</td>
+    <td field="email" type="email" class="email">${client.email}</td>
     <td field="city" class="city">${client.city}</td>
     <td field="commentsAboutClient" type="array">
         <#list client.commentsAboutClient as comm>
@@ -45,7 +45,7 @@
         <form action="/deleteFromGroup" method="post">
             <input type="hidden" name="groupId" value="${group.id}">
             <input type="hidden" name="clientId" value="${client.id}">
-            <input type="submit" value="Exit">
+            <input type="submit" class="btn btn-danger btn-sm" value="Exit">
         </form>
     </td>
     </tr>

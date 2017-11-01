@@ -15,8 +15,8 @@
     <tr entityID="${client.id}">
         <td field="name" class="name">${client.name}</td>
         <td field="surname" class="surname">${client.surname}</td>
-        <td field="phoneNumber" class="phoneNumber">${client.phoneNumber}</td>
-        <td field="email" class="email">${client.email}</td>
+        <td field="phoneNumber" type="phone" class="phoneNumber">${client.phoneNumber}</td>
+        <td field="email" type="email" class="email">${client.email}</td>
         <td field="city" class="city">${client.city}</td>
         <td field="commentsAboutClient" type="array">
         <#list client.commentsAboutClient as comm>
@@ -84,7 +84,7 @@
     </#list>
     </select>
 </div>
-<button name="addGroupButton">Add group</button>
+<button name="addGroupButton" class="btn btn-info btn-sm">Add group</button>
 
 <table id="groupsTable" class="table table-hover" data-table='true' path="/liveEditGroup">
     <thead>
@@ -123,7 +123,7 @@
             <form action="/deleteFromGroup" method="post">
                 <input type="hidden" name="groupId" value="${group.id}">
                 <input type="hidden" name="clientId" value="${client.id}">
-                <input type="submit" value="Exit">
+                <input type="submit" class="btn btn-danger btn-sm" value="Exit">
             </form>
         </td>
     </tr>

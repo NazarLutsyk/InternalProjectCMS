@@ -11,7 +11,7 @@
 </select>
 <input name="startDate" type="date">
 <input name="endDate" type="date">
-<button id="selectByPeriod">Select by period</button>
+<button id="selectByPeriod" class="btn btn-info btn-sm">Select by period</button>
 
 <div id="container" style="width: 75%;">
     <canvas id="canvas"></canvas>

@@ -1,4 +1,22 @@
 <#include "templates/header.ftl">
+<form action="/createGroup" method="post">
+    <label for="course">
+        Выбрать курс
+        <select class="js-example-basic-single" id="course" name="course" required>
+        <#list courses as course>
+            <option value="${course.id}">${course.courseTitle}</option>
+        </#list>
+        </select>
+    </label>
+    <br>
+    <input type="text" name="groupIdentifier" placeholder="groupIdentifier" required>
+    <br>
+    <input type="datetime-local" name="startDate" placeholder="startDate" required>
+    <br>
+    <input type="text" name="room" placeholder="room" required>
+    <input type="submit" class="btn btn-success btn-sm" name="" placeholder="">
+</form>
+<br>
 <form action="/showAllGroups" method="get">
     <label for="">Filter by:</label>
     <select name = "course">
@@ -13,7 +31,7 @@
     </select>
     <input type="date" name="startDate">
     <input type="date" name="endDate">
-    <input type="submit">
+    <input type="submit" class="btn btn-info btn-sm">
 </form>
 <table id="groupsTable" class="table table-hover" data-table='true' path="/liveEditGroup">
     <thead>

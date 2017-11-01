@@ -2,7 +2,7 @@
 <h2>Create source</h2>
 <form action="/createSource" method="post">
     <input type="text" name="name" placeholder="Name" required>
-    <input type="submit">
+    <input type="submit" class="btn btn-success btn-sm">
 </form>
 <table class="table table-hover" data-table='true' path="/liveEditSocial">
     <thead>

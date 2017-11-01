@@ -1,9 +1,9 @@
 <#include "templates/header.ftl">
 <form action="/createPayment" method="post">
-    <label for="">Сумма<input type="number" name="amount"></label>
-    <label for="">Дата платежа<input type="datetime-local" name="dateOfPayment"</label>
+    <label for="">Сумма<input type="number" name="amount" required></label>
+    <label for="">Дата платежа<input type="datetime-local" name="dateOfPayment" required></label>
     <input type="hidden" name="appId" value="${application.id}">
-    <input type="submit" name="" placeholder="">
+    <input type="submit" class="btn btn-success btn-sm" name="" placeholder="">
 </form>
 
 <table class="table table-hover" data-table='true' path="">

@@ -6,6 +6,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.*;
+import java.util.TimeZone;
 
 public class WebInit implements WebApplicationInitializer {
     @Override
@@ -15,6 +16,8 @@ public class WebInit implements WebApplicationInitializer {
         CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
         encodingFilter.setEncoding("UTF-8");
         encodingFilter.setForceEncoding(true);
+
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Kyiv"));
 
         FilterRegistration.Dynamic filterRegistration =
                 servletContext.addFilter("encodingFilter", encodingFilter);

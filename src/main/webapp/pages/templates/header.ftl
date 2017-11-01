@@ -27,9 +27,10 @@
     <script src="/externalLibsJs/select2JS/select2.min.js"></script>
     <link rel="stylesheet" href="/style/main.css">
 
-    <#--datatable-->
+<#--datatable-->
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+    <script src="/script/updateValidation.js"></script>
 </head>
 <body>
 <#setting time_zone="Europe/Kyiv">
@@ -41,17 +42,29 @@
 <#--<a class="breadcrumb-item" href="/showAllCourses">showAllCourses</a>-->
 <#---->
 <#--</nav>-->
-<ol class="breadcrumb">
-    <li><a href="/">Home</a></li>
-    <li><a href="/adminPage">Админка</a></li>
-    <li><a href="/showAllApplications">Заявки</a></li>
-    <li><a href="/showAllClients">Клиенты</a></li>
-    <li><a href="/showAllCourses">Курсы</a></li>
-    <li><a href="/showAllGroups">Группы</a></li>
-    <li><a href="/analitics">Аналитика</a></li>
-    <li><a href="/showFakeUsers">Фейковые юзери</a></li>
-    <li><a href="/socials">Ресурсы</a></li>
-    <form action="/logout" method="post" style="float: right">
-        <input type="submit" value="Logout">
-    </form>
-</ol>
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">CRM</a>
+            </div>
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/adminPage">Админка</a></li>
+                    <li><a href="/showAllApplications">Заявки</a></li>
+                    <li><a href="/showAllClients">Клиенты</a></li>
+                    <li><a href="/showAllCourses">Курсы</a></li>
+                    <li><a href="/showAllGroups">Группы</a></li>
+                    <li><a href="/analitics">Аналитика</a></li>
+                    <li><a href="/showFakeUsers">Фейковые юзери</a></li>
+                    <li><a href="/socials">Ресурсы</a></li>
+                </ul>
+                <form action="/logout" class="navbar-form navbar-right" method="post">
+                    <input type="submit" value="Logout" class="btn btn-info">
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+</html>

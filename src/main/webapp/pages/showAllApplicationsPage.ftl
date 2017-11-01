@@ -2,9 +2,9 @@
 <h2>создание заявки</h2>
 <form action="/createApplication" method="post">
     <label for="">время подачи заявки<input type="datetime-local" name="appReciveDate"
-                                            placeholder="appReciveDate"></label>
+                                            placeholder="appReciveDate" required></label>
     <label for="">откуда узнал
-        <select name="source">
+        <select name="source" required>
         <#list sources as source>
             <option value="${source.id}">
                 ${source.name}
@@ -12,14 +12,14 @@
         </#list>
         </select>
     </label>
-    <label for="">коммент от клиента<input type="text" name="commnetFromClient" placeholder="commnetFromClient"></label>
+    <label for="">коммент от клиента<input type="text" name="commnetFromClient" placeholder="commnetFromClient" required></label>
     <label for="">наш комментарий<input type="text" name="commentFromManager"
-                                        placeholder="commentFromManager"></label>
-    <label for="">теги<input type="text" name="tagsAboutApplication" placeholder="tagsAboutApplication "></label>
-    <label for="">будующий курс<input type="text" name="futureCourse" placeholder="futureCourse"></label>
+                                        placeholder="commentFromManager" required></label>
+    <label for="">теги<input type="text" name="tagsAboutApplication" placeholder="tagsAboutApplication" required></label>
+    <label for="">будующий курс<input type="text" name="futureCourse" placeholder="futureCourse" required></label>
 <#if clients?? >
     <label for=""> клиент
-        <select name="client" id="">
+        <select name="client" id="" required>
             <#list clients as client>
                 <option value="${client.id}">${client.name} ${client.surname} </option>
             </#list>
@@ -28,7 +28,7 @@
 </#if>
 <#if courses??>
     <label for=""> курс
-        <select name="course" id="">
+        <select name="course" id="" required>
             <#list courses as course>
                 <option value="${course.id}">${course.courseTitle}</option>
             </#list>
@@ -37,14 +37,14 @@
     </label>
 </#if>
     <label for="">скидка
-        <input type="number" min="0" name="discount" placeholder="discount">
+        <input type="number" min="0" max="100" name="discount" placeholder="discount" required>
     </label>
     <input type="hidden" name="appCloseDate" id="closeDate">
-    <label>Find unpaid applications<input type="submit" name="" placeholder=""></label>
+    <input type="submit" class="btn btn-success btn-sm" name="" placeholder="">
 </form>
 <form action="/showAllApplications" method="get">
     <input type="hidden" name="notPaid" value="true">
-    <input type="submit">
+    <label>Find unpaid applications<input type="submit" class="btn btn-info btn-sm"></label>
 </form>
 <table id="applicationsTable" class="table table-hover" data-table='true' path="/liveEditApplication">
     <thead class="bg-primary">

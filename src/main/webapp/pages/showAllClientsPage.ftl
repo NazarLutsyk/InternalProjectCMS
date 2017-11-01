@@ -3,13 +3,13 @@
 
 <h2>создание клиента</h2>
 <form action="/createClient" method="post" class="form-inline">
-    <label for="">имя<input type="text" name="name" placeholder="name"></label>
-    <label for="">фамилия<input type="text" name="surname" placeholder="surname"></label>
-    <label for="">телефон<input type="text" name="phoneNumber" placeholder="phoneNumber"></label>
-    <label for="">мыло<input type="email" name="email" placeholder="email"></label>
-    <label for="">город<input type="text" name="city" placeholder="city"></label>
-    <label for="">наш коммент<input type="text" name="commentAboutClient" placeholder="commentAboutClient"></label>
-    <label for="">теги<input type="text" name="tagsAboutClient" placeholder="tagsAboutClient"></label>
+    <label for="">имя<input type="text" name="name" placeholder="name" required></label>
+    <label for="">фамилия<input type="text" name="surname" placeholder="surname" required></label>
+    <label for="">телефон<input type="tel" name="phoneNumber" placeholder="phoneNumber" required></label>
+    <label for="">мыло<input type="email" name="email" placeholder="email" required></label>
+    <label for="">город<input type="text" name="city" placeholder="city" required></label>
+    <label for="">наш коммент<input type="text" name="commentAboutClient" placeholder="commentAboutClient" required></label>
+    <label for="">теги<input type="text" name="tagsAboutClient" placeholder="tagsAboutClient" required></label>
 <#--<label for=""><input type="text" id="recomendation" placeholder="рекомендация"></label>-->
     <label for="">рекомендации
         <select name="recommendation" id="" class="js-example-basic-single" placeholder="рекомендации">
@@ -19,11 +19,11 @@
         </#list>
         </select>
     </label>
-    <input type="submit" name="" placeholder="">
+    <input type="submit" btn btn-success btn-sm name="" placeholder="">
 </form>
 <form action="/showAllClients" method="get">
     <input type="hidden" value="true" name="withoutGroups">
-    <label>Find not processed clients<input type="submit" value="Find"></label>
+    <label>Find not processed clients<input type="submit" class="btn btn-info btn-sm" value="Find"></label>
 </form>
 
 <table id="clientsTable" class="table table-hover" data-table='true' path="/liveEditClient">
@@ -42,8 +42,8 @@
     <tr entityID="${client.id}">
         <td field="name" class="name"><a href="/client/${client.id}">${client.name}</a></td>
         <td field="surname" class="surname">${client.surname}</td>
-        <td field="phoneNumber" class="phoneNumber">${client.phoneNumber}</td>
-        <td field="email" class="email">${client.email}</td>
+        <td field="phoneNumber" type="phone" class="phoneNumber">${client.phoneNumber}</td>
+        <td field="email" type="email" class="email">${client.email}</td>
         <td field="city" class="city">${client.city}</td>
         <td field="commentsAboutClient" type="array">
             <#list client.commentsAboutClient as comm>

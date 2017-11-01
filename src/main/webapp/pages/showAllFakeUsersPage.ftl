@@ -6,7 +6,7 @@
     <label for="">Мейл<input type="email" name="email" placeholder="email" required></label>
     <label for="">Комментарий<input type="text" name="userComment" placeholder="comment" required></label>
     <label for="">Изображение<input type="file" name="image" placeholder="image" required></label>
-    <input type="submit" name="" placeholder="">
+    <input type="submit" class="btn btn-success btn-sm" name="" placeholder="">
 </form>
 <table class="table table-hover" data-table='true' path="/liveEditFakeUser">
     <thead class="bg-primary">
@@ -24,8 +24,8 @@
     <tr entityID = "${user.id}">
         <td field="name"><a href="/fakeUser/${user.id}">${user.name}</a></td>
         <td field="surname">${user.surname}</td>
-        <td field="phone">${user.phone}</td>
-        <td field="email">${user.email}</td>
+        <td field="phone" type="phone">${user.phone}</td>
+        <td field="email" type="email">${user.email}</td>
         <td field="fakeUserComments" type="array">
             <#list user.fakeUserComments as comment>
                 ${comment}<#sep >;

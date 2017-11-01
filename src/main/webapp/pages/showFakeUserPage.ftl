@@ -10,7 +10,7 @@
                                                required></label>
     <label for="">Коммент<input type="text" name="accComment" placeholder="comment" required></label>
     <input type="hidden" name="fakeUserId" value="${fakeUser.id}">
-    <input type="submit" name="" placeholder="">
+    <input type="submit" class="btn btn-success btn-sm" name="" placeholder="">
 </form>
 
 <table class="table table-hover" data-table='true' path="/liveEditFakeUser">
@@ -27,8 +27,8 @@
     <tr entityID="${fakeUser.id}">
         <td field="name"><a href="/fakeUser/${fakeUser.id}">${fakeUser.name}</a></td>
         <td field="surname">${fakeUser.surname}</td>
-        <td field="phone">${fakeUser.phone}</td>
-        <td field="email">${fakeUser.email}</td>
+        <td field="phone" type="phone">${fakeUser.phone}</td>
+        <td field="email" type="email">${fakeUser.email}</td>
         <td field="fakeUserComments" type="array">
             <#list fakeUser.fakeUserComments as comment>
                  ${comment}<#sep >;
@@ -73,7 +73,7 @@
                   style="display: inline-block">
                 <input type="hidden" name="accountId"
                        value="${fakeAccount.id}"/>
-                <input type="submit" value="Delete"/>
+                <input type="submit" class="btn btn-danger btn-sm" value="Delete"/>
             </form>
         </td>
     </tr>
