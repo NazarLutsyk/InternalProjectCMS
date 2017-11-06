@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import ua.com.owu.dao.CourseDAO;
 import ua.com.owu.entity.Course;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -33,5 +35,13 @@ public class CourseDAOImpl implements CourseDAO {
         Course course = datastore.get(Course.class, new ObjectId(id));
         System.out.println("course found : " + course);
         return course;
+    }
+
+    @Override
+    public List<Course> findAll(Collection<String> ids) {
+        List<Course> courses = new ArrayList<>();
+        ids.forEach(id -> courses.add(findOne(id)));
+        System.out.println("All courses by ids:" + courses);
+        return courses;
     }
 }

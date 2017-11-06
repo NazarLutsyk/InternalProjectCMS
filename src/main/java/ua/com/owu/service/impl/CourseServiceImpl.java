@@ -6,6 +6,7 @@ import ua.com.owu.dao.CourseDAO;
 import ua.com.owu.entity.Course;
 import ua.com.owu.service.CourseService;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -26,5 +27,10 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course findOne(String id) {
         return courseDAO.findOne(id);
+    }
+
+    @Override
+    public List<Course> findAll(Collection<String> ids) {
+        return courseDAO.findAll(ids);
     }
 }

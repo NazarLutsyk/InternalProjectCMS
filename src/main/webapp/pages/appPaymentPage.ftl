@@ -16,7 +16,7 @@
     <#list payments as payment>
         <tr entityID="${payment.id}">
             <td field="amount">${payment.amount}</td>
-            <td field="dateOfPayment">${payment.dateOfPayment?string("yyyy")}</td>
+            <td field="dateOfPayment">${payment.dateOfPayment?string("yyyy/MM/dd HH:mm")}</td>
         </tr>
     </#list>
 </table>

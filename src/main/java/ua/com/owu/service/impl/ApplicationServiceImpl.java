@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ua.com.owu.dao.ApplicationDAO;
 import ua.com.owu.entity.Application;
 import ua.com.owu.entity.Client;
+import ua.com.owu.entity.Course;
 import ua.com.owu.entity.Social;
 import ua.com.owu.service.ApplicationService;
 
@@ -27,6 +28,11 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public List<Application> findAll() {
         return applicationDAO.findAll();
+    }
+
+    @Override
+    public List<Application> findAllByIds(Collection<String> ids) {
+        return applicationDAO.findAllByIds(ids);
     }
 
     @Override
@@ -55,6 +61,14 @@ public class ApplicationServiceImpl implements ApplicationService {
             return applicationDAO.getSocialStatisticByPeriod(endDate,startDate,socials);
         }
         return applicationDAO.getSocialStatisticByPeriod(startDate,endDate,socials);
+    }
+
+    @Override
+    public long getApplicationStatistic(LocalDate startDate, LocalDate endDate, Collection<Course> courses) {
+        if (endDate.isBefore(startDate)){
+            return applicationDAO.getApplicationStatistic(endDate,startDate,courses);
+        }
+        return applicationDAO.getApplicationStatistic(startDate,endDate,courses);
     }
 
     @Override

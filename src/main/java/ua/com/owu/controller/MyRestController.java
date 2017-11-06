@@ -1,12 +1,10 @@
 package ua.com.owu.controller;
 
-import com.sun.scenario.effect.Merge;
 import org.joda.time.LocalDate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ua.com.owu.dto.ClientDTO;
 import ua.com.owu.entity.*;
@@ -15,6 +13,7 @@ import ua.com.owu.entity.seo.FakeUser;
 import ua.com.owu.service.*;
 import ua.com.owu.service.util.ClientDTOAdapter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -46,10 +45,10 @@ public class MyRestController {
     }
 
     @PostMapping("/liveEditClient")
-    public void liveEditClient(@RequestBody Client client){
+    public void liveEditClient(@RequestBody Client client) {
         System.out.println(client);
         Client oldClient = clientService.findOne(client.getId().toString());
-        BeanUtils.copyProperties(client,oldClient,
+        BeanUtils.copyProperties(client, oldClient,
                 "recomendation", "groups", "applications");
         clientService.save(oldClient);
     }
@@ -63,12 +62,12 @@ public class MyRestController {
     }
 
     @PostMapping("/liveEditApplication")
-    public void liveEditApplication(@RequestBody Application app){
+    public void liveEditApplication(@RequestBody Application app) {
         System.out.println(app);
         Application oldApp = applicationService.findOne(app.getId().toString());
         BeanUtils.copyProperties(app, oldApp,
-                "client","course","payments","checked","source","discount",
-                "priceWithDiscount","appCloseDate","paid","leftToPay");
+                "client", "course", "payments", "checked", "source", "discount",
+                "priceWithDiscount", "appCloseDate", "paid", "leftToPay");
         applicationService.save(oldApp);
     }
 
@@ -89,10 +88,10 @@ public class MyRestController {
     }
 
     @PostMapping("/liveEditSocial")
-    public void liveEditSocial(@RequestBody Social social){
+    public void liveEditSocial(@RequestBody Social social) {
         System.out.println(social);
         Social oldSocial = socialService.find(social.getId().toString());
-        BeanUtils.copyProperties(social,oldSocial,"applications");
+        BeanUtils.copyProperties(social, oldSocial, "applications");
         socialService.save(social);
     }
 
@@ -148,12 +147,12 @@ public class MyRestController {
     public List<String> getSocialStatisticGroupBySocial(@RequestBody Map<String, String> params) {
         LocalDate startDate;
         LocalDate endDate;
-        if (!(params.get("startDate").equals("") || params.get("endDate").equals(""))){
+        if (!(params.get("startDate").equals("") || params.get("endDate").equals(""))) {
             startDate = LocalDate.parse(params.get("startDate"));
             endDate = LocalDate.parse(params.get("endDate"));
-        }else {
-            startDate = new LocalDate(1970,1,1);
-            endDate = new LocalDate(3000,1,1);
+        } else {
+            startDate = new LocalDate(1970, 1, 1);
+            endDate = new LocalDate(3000, 1, 1);
         }
         List<Social> socials = null;
         if (params.get("socials").equals("") || params.get("socials").split(",").length == 0)
@@ -162,6 +161,28 @@ public class MyRestController {
             socials = socialService.findAllByIds(Arrays.asList(params.get("socials").split(",")));
 
         List<String> statistic = applicationService.getSocialStatisticByPeriod(startDate, endDate, socials);
+        return statistic;
+    }
+
+    @PostMapping("/getApplicationsStatistic")
+    public long getApplicationsStatistic(@RequestBody Map<String, String> params) {
+        LocalDate startDate;
+        LocalDate endDate;
+        if (!(params.get("startDate").equals("") || params.get("endDate").equals(""))){
+            startDate = LocalDate.parse(params.get("startDate"));
+            endDate = LocalDate.parse(params.get("endDate"));
+        }else {
+            startDate = new LocalDate(1970,1,1);
+            endDate = new LocalDate(3000,1,1);
+        }
+        List<Course> courses = new ArrayList<>();
+        if (params.get("courses").equals("") || params.get("courses").split(",").length == 0)
+            courses = courseService.findAll();
+        else
+            courses = courseService.findAll(Arrays.asList(params.get("courses").split(",")));
+
+        long statistic = applicationService
+                .getApplicationStatistic(startDate, endDate, courses);
         return statistic;
     }
 }

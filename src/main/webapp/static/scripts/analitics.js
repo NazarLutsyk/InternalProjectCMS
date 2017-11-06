@@ -66,5 +66,22 @@ $("#selectByPeriod").click(function () {
     });
 });
 
+$("#selectAppsStat").click(function () {
+    let params = {
+        startDate:$("input[name='start']").val(),
+        endDate:$("input[name='end']").val(),
+        courses:$("#courses").val().join(",")
+    };
+    $.ajax({
+        url: "/getApplicationsStatistic",
+        method: "post",
+        contentType: "application/json",
+        data: JSON.stringify(params),
+        success: function (res) {
+            let text = $("#appStatContainer").children().text(res);
+        }
+    });
+});
+
 
 

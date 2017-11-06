@@ -137,6 +137,7 @@ public class RouteController {
     @GetMapping("/analitics")
     public String getAnaliticPage(Model model) {
         model.addAttribute("sources",socialService.findAll());
+        model.addAttribute("courses",courseService.findAll());
         return "analiticPage";
     }
 

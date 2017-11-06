@@ -57,7 +57,7 @@
                     <li><a href="/showAllCourses">Курсы</a></li>
                     <li><a href="/showAllGroups">Группы</a></li>
                     <li><a href="/analitics">Аналитика</a></li>
-                    <li><a href="/showFakeUsers">Фейковые юзери</a></li>
+                    <li><a href="/showFakeUsers">ФЮ</a></li>
                     <li><a href="/socials">Ресурсы</a></li>
                 </ul>
                 <form action="/logout" class="navbar-form navbar-right" method="post">

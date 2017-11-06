@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import ua.com.owu.dao.ApplicationDAO;
 import ua.com.owu.entity.Application;
 import ua.com.owu.entity.Client;
+import ua.com.owu.entity.Course;
 import ua.com.owu.entity.Social;
 
 import java.util.ArrayList;
@@ -32,6 +33,14 @@ public class ApplicationDAOImpl implements ApplicationDAO {
     public void save(Application application) {
         datastore.save(application);
         System.out.println("application saved");
+    }
+
+    @Override
+    public List<Application> findAllByIds(Collection<String> ids) {
+        List<Application> apps = new ArrayList<>();
+        ids.forEach(id -> apps.add(findOne(id)));
+        System.out.println("All applications by ids:" + apps);
+        return apps;
     }
 
     public List<Application> findAll() {
@@ -101,6 +110,19 @@ public class ApplicationDAOImpl implements ApplicationDAO {
         aggregate.forEachRemaining(document -> documents.add(document.toJson()));
         System.out.println("Statistic by period " + startDate + " " + endDate + ":" + documents);
         return documents;
+    }
+
+    @Override
+    public long getApplicationStatistic(LocalDate startDate, LocalDate endDate, Collection<Course> courses) {
+        Query<Application> queryApp = datastore.createQuery(Application.class);
+        CriteriaContainer and = queryApp.and(
+                queryApp.criteria("appReciveDate").greaterThanOrEq(startDate.toDate()),
+                queryApp.criteria("appReciveDate").lessThanOrEq(endDate.toDate()),
+                queryApp.criteria("course").hasAnyOf(courses)
+        );
+        long count = queryApp.count();
+        System.out.println("App stat by period " + startDate + " " + endDate + ":" + count);
+        return count;
     }
 
     @Override

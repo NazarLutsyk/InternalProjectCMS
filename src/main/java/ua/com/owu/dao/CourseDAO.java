@@ -2,6 +2,7 @@ package ua.com.owu.dao;
 
 import ua.com.owu.entity.Course;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface CourseDAO {
@@ -10,4 +11,6 @@ public interface CourseDAO {
     List<Course> findAll();
 
     Course findOne(String id);
+
+    List<Course> findAll(Collection<String> ids);
 }
